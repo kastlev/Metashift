@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dyy5qut610exk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n5ygq"]
+size = Vector2(1282.5, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_emose"]
+size = Vector2(686.25, 19.5)
+
+[node name="limit" type="StaticBody2D" unique_id=2065008224 groups=["wall"]]
+
+[node name="WallTop" type="CollisionShape2D" parent="." unique_id=1088227505]
+position = Vector2(563, -27)
+shape = SubResource("RectangleShape2D_n5ygq")
+
+[node name="WallDown" type="CollisionShape2D" parent="." unique_id=1702294277]
+position = Vector2(563, 675)
+shape = SubResource("RectangleShape2D_n5ygq")
+
+[node name="WallLeft" type="CollisionShape2D" parent="." unique_id=1664136957]
+position = Vector2(-28, 333)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_emose")
+
+[node name="WallRight" type="CollisionShape2D" parent="." unique_id=236316308]
+position = Vector2(1182, 325)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_emose")

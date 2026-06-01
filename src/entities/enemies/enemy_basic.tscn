@@ -1,0 +1,110 @@
+[gd_scene format=3 uid="uid://cpm4pb51vbtrr"]
+
+[ext_resource type="Script" uid="uid://c8h8c8qd2bmpt" path="res://src/entities/enemies/enemy_basic.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://dfm76vdop74nd" path="res://src/entities/enemies/base/bullet_enemy.tscn" id="2_ye4fq"]
+[ext_resource type="Texture2D" uid="uid://dima6spmq81gg" path="res://art/images/enemys/death_animation_final_3-Sheet.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://cps6t2srsrbt7" path="res://art/images/enemys/enemy_01-Sheet.png" id="4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57t6x"]
+atlas = ExtResource("3")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tca5x"]
+atlas = ExtResource("3")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhlc2"]
+atlas = ExtResource("4")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ggpgo"]
+atlas = ExtResource("4")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_23myu"]
+atlas = ExtResource("4")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jql5w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_57t6x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tca5x")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nhlc2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ggpgo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_23myu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 6.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5trun"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_osp5n"]
+size = Vector2(65.6563, 48.1563)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_efgd4"]
+radius = 186.011
+
+[node name="EnemyBasic" type="CharacterBody2D" unique_id=1247254801]
+motion_mode = 1
+script = ExtResource("1")
+bullet_scene = ExtResource("2_ye4fq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1344006574]
+unique_name_in_owner = true
+texture_filter = 1
+texture_repeat = 2
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_jql5w")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1257279173]
+shape = SubResource("RectangleShape2D_5trun")
+
+[node name="AreaDamage" type="Area2D" parent="." unique_id=914836320 groups=["enemy"]]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDamage" unique_id=964980430]
+shape = SubResource("RectangleShape2D_osp5n")
+
+[node name="VisibleOnScreen" type="VisibleOnScreenNotifier2D" parent="AreaDamage" unique_id=2054916636]
+process_mode = 4
+
+[node name="AreaDetection" type="Area2D" parent="." unique_id=1773182545]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDetection" unique_id=1360361506]
+shape = SubResource("CircleShape2D_efgd4")
+
+[node name="TimerDamagedEffect" type="Timer" parent="." unique_id=1701284064]
+unique_name_in_owner = true
+wait_time = 0.1
+one_shot = true
+
+[node name="TimerShoot" type="Timer" parent="." unique_id=1901405682]
+unique_name_in_owner = true
+wait_time = 2.0
+autostart = true
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="area_entered" from="AreaDamage" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="AreaDamage" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="AreaDetection" to="." method="_on_area_detection_body_entered"]
+[connection signal="timeout" from="TimerDamagedEffect" to="." method="_on_timer_damaged_efect_timeout"]
+[connection signal="timeout" from="TimerShoot" to="." method="_on_timer_timeout"]

@@ -1,0 +1,20 @@
+# Godot 4+ specific ignores
+.godot/
+
+# Godot-generated files
+*.import
+*.tmp
+export.cfg
+export_credentials.cfg
+
+# Translations
+*.translation
+
+# Mono/C# specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# OS-specific ignores
+.DS_Store
+Thumbs.db
