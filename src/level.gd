@@ -46,7 +46,7 @@ func _process(_delta: float) -> void :
 	if can_win:
 			var enemies = get_tree().get_nodes_in_group("enemy")
 			if enemies.size() == 0:
-				get_tree().change_scene_to_file("res://scenes/win.tscn")
+				get_tree().change_scene_to_file("res://src/screens/win.tscn")
 
 	lifes.text = str(GLOBAL.lifes_player)
 

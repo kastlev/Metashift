@@ -62,7 +62,7 @@ func _process(delta: float) -> void :
 
 	match current_state:
 		STATE.IDLE:
-			idle_behavior(delta)
+			pass
 		STATE.FOLLOW:
 			follow_player(delta)
 		STATE.DASH:
@@ -106,9 +106,6 @@ func impulse_to_player() -> void :
 		scale = Vector2(1, 1)
 		velocity = Vector2.ZERO
 		current_state = STATE.IDLE
-
-func idle_behavior(delta: float) -> void :
-	pass
 
 func rebound_around(delta: float) -> void :
 	var collision = move_and_collide(velocity * rebound_velocity * delta)

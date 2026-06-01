@@ -17,11 +17,4 @@ texture = ExtResource("2_e4wwb")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1678576749]
 shape = SubResource("CircleShape2D_x4jhy")
 
-[node name="ResetCollision" type="Timer" parent="." unique_id=1670977407]
-wait_time = 0.2
-one_shot = true
-
 [node name="VisibleOnScreen" type="VisibleOnScreenNotifier2D" parent="." unique_id=1515640928]
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="screen_exited" from="VisibleOnScreen" to="." method="_on_visible_on_screen_screen_exited"]
