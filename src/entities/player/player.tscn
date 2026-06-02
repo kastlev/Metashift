@@ -5,7 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://cglthaenley2t" path="res://src/entities/player/bullet_player.tscn" id="2_0mfjg"]
 [ext_resource type="AudioStream" uid="uid://bxye17k3b524p" path="res://art/audio/sound_effects/shoot1.wav" id="3"]
 [ext_resource type="AudioStream" uid="uid://c11u8bjxas72p" path="res://art/audio/sound_effects/hurt1.wav" id="4"]
+[ext_resource type="Script" uid="uid://1gysj4qvljlo" path="res://src/components/health_component.gd" id="4_eb65w"]
 [ext_resource type="AudioStream" uid="uid://bs4wir50si5vo" path="res://art/audio/sound_effects/dash.wav" id="5"]
+[ext_resource type="Script" uid="uid://dpchwl51pc0ui" path="res://src/components/health_data.gd" id="5_4f0qm"]
+[ext_resource type="Script" uid="uid://dlgfycrugjthu" path="res://src/components/hurtbox_component.gd" id="7_tk761"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_foqj3"]
 atlas = ExtResource("2")
@@ -39,8 +42,15 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v2cuf"]
 size = Vector2(25, 24)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_v37j6"]
-radius = 137.091
+[sub_resource type="Resource" id="Resource_tk761"]
+script = ExtResource("5_4f0qm")
+max_health = 7.0
+has_iframes = true
+iframe_duration = 1.0
+metadata/_custom_type_script = "uid://dpchwl51pc0ui"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tk761"]
+radius = 28.0
 
 [node name="Player" type="CharacterBody2D" unique_id=2076545720 groups=["player"]]
 motion_mode = 1
@@ -64,11 +74,19 @@ shape = SubResource("RectangleShape2D_v2cuf")
 [node name="BulletSpawn" type="Marker2D" parent="." unique_id=403588781 groups=["player"]]
 unique_name_in_owner = true
 
-[node name="AreaFollow" type="Area2D" parent="." unique_id=234447265]
+[node name="HealthComponent" type="Node" parent="." unique_id=1367952813]
 unique_name_in_owner = true
+script = ExtResource("4_eb65w")
+data = SubResource("Resource_tk761")
+metadata/_custom_type_script = "uid://1gysj4qvljlo"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaFollow" unique_id=1889834964]
-shape = SubResource("CircleShape2D_v37j6")
+[node name="HurtboxComponent" type="Area2D" parent="." unique_id=1005815875 node_paths=PackedStringArray("health_component")]
+script = ExtResource("7_tk761")
+health_component = NodePath("../HealthComponent")
+metadata/_custom_type_script = "uid://dlgfycrugjthu"
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1018015063]
+shape = SubResource("CircleShape2D_tk761")
 
 [node name="Shoot" type="AudioStreamPlayer2D" parent="." unique_id=294778555]
 unique_name_in_owner = true

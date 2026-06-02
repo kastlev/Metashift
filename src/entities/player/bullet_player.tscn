@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cglthaenley2t"]
 
-[ext_resource type="Script" uid="uid://dtrtgvmanwr7g" path="res://src/entities/player/bullet_player.gd" id="1_ps4oa"]
+[ext_resource type="Script" uid="uid://cffguapx2qhi0" path="res://src/entities/bullet.gd" id="1_ps4oa"]
 [ext_resource type="Texture2D" uid="uid://cb8ysw1mbnk6g" path="res://art/images/player/bullet_final.png" id="2_f6fx5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x4jhy"]
@@ -8,6 +8,7 @@ radius = 12.0
 
 [node name="BulletPlayer" type="Area2D" unique_id=484076534 groups=["shoot"]]
 script = ExtResource("1_ps4oa")
+target_group = "enemy"
 
 [node name="BulletSprite" type="Sprite2D" parent="." unique_id=1164700279]
 scale = Vector2(4.1, 4.1)
@@ -17,7 +18,3 @@ texture = ExtResource("2_f6fx5")
 shape = SubResource("CircleShape2D_x4jhy")
 
 [node name="VisibleOnScreen" type="VisibleOnScreenNotifier2D" parent="." unique_id=1532970118]
-
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="screen_exited" from="VisibleOnScreen" to="." method="_on_visible_on_screen_screen_exited"]

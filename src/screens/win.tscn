@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bivo007c70l1b"]
+[gd_scene format=3 uid="uid://bivo007c70l1b"]
 
 [ext_resource type="FontFile" uid="uid://bsanmgeyeko30" path="res://art/fonts/Jersey10-Regular.ttf" id="1"]
 
-[node name="game_over" type="Control"]
+[node name="Win" type="Control" unique_id=203911728]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,7 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=369435835]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +19,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0214346, 0.0214346, 0.0214346, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=685124720]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,11 +27,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=506253801]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="WinLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=86110819]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("1")

@@ -1,197 +1,101 @@
-extends CharacterBody2D
+class_name EnemyButterfly
+extends Enemy
 
 @export_group("Shoot")
-@export var num_bullets = 8
-@export var fire_rate: float = 0.25
-@export var bullet_speed = 300.0
-@export var bullet_range = 1000.0
-@export var fire_velocity = 300
+## Cantidad de balas en la explosión
+@export var num_bullets: int = 8
+@export var bullet_speed: float = 300.0
+@export var bullet_range: float = 1000.0
+## Velocidad de la bala dirigida al jugador	
+@export var fire_velocity: float = 300.0
 @export var bullet_scene: PackedScene
 
-@export_group("Movement")
-@export var follow_distance: float = 200.0
-@export var speed: float = 150.0
-
 @export_group("Characteristics")
-@export var lifes_enemy: int = 2
-@export var current_state: STATE = STATE.FOLLOW_IA
-@export var must_explotion = true
-@export var rebound_velocity = 1
-@export var impulse_distance: float = 5000.0
-@export var impulse_acceleration: float = 200.0
+@export var must_explotion: bool = true
 
-@onready var animated_sprite: AnimatedSprite2D = %AnimatedSprite2D
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var timer_damaged_effect: Timer = %TimerDamagedEffect
 @onready var timer_shoot: Timer = %TimerShoot
-@onready var player: CharacterBody2D = get_tree().get_first_node_in_group("player")
 
-var random_angle = randf_range(0, 2 * PI)
-var random_distance = randi_range(0, 300)
-var random_offset = Vector2(cos(random_angle), sin(random_angle)) * random_distance
+var random_angle := randf_range(0.0, 2.0 * PI)
+var random_distance := randi_range(0, 300)
+var random_offset := Vector2(cos(random_angle), sin(random_angle)) * random_distance
+var is_randoming := false
+var is_explotion_bullet := false
 
-var last_position_player
-var last_shot_time: float = 0.0
-var can_impulse: bool = true
-var applying_impulse: bool = false
-var is_randoming = false
-var is_explotion_bullet = false
+func _ready() -> void:
+	super._ready()
+	current_state = STATE.FOLLOW_IA
+	timer_shoot.timeout.connect(_on_timer_timeout)
+	timer_shoot.wait_time = randf_range(1.0, 3.0)
+	timer_shoot.start()
 
-var direction: Vector2 = Vector2.ZERO
-
-enum STATE{
-	IDLE, 
-	FOLLOW, 
-	DASH, 
-	BALL, 
-	FOLLOW_IA
-}
-
-func _ready() -> void :
-	player = get_tree().get_first_node_in_group("player")
-
-func _process(delta: float) -> void :
-	if lifes_enemy <= 0:
-		enemy_death()
-		return
-
-	if velocity.x > 0:
-		animated_sprite.flip_h = false
-	elif velocity.x < 0:
-		animated_sprite.flip_h = true
-
+func update_behavior(delta: float) -> void:
 	match current_state:
-		STATE.IDLE:
-			pass
 		STATE.FOLLOW:
 			follow_player(delta)
-		STATE.DASH:
-			impulse_to_player()
-		STATE.BALL:
-			rebound_around(delta)
 		STATE.FOLLOW_IA:
 			search_for_player(delta)
-	move_and_slide()
-	
-func follow_player(_delta: float) -> void :
-	if not is_instance_valid(player):
-		return
-	var distance_to_player = position.distance_to(player.position)
 
-	if distance_to_player > follow_distance and is_randoming == false:
+func follow_player(_delta: float) -> void:
+	var dist := global_position.distance_to(player.global_position)
+	if dist > follow_distance and not is_randoming:
 		is_randoming = true
 		random_position_to_follow()
 		current_state = STATE.FOLLOW_IA
-		
-	if player and GLOBAL.lifes_player > 0:
-		direction = (player.position - position).normalized()
-		velocity = direction * speed
+		return
+	if _player_alive():
+		velocity = (player.global_position - global_position).normalized() * speed
+	else:
+		current_state = STATE.FOLLOW_IA
 
-func damaged() -> void :
-	if !lifes_enemy <= 0:
-		modulate = Color(31820.271, 0.0, 0.0) 
-		timer_damaged_effect.start()
-
-func impulse_to_player() -> void :
-	#if last_position_player == null:
-	last_position_player = player.position
-	scale = Vector2(0.8, 0.8)
-	direction = (last_position_player - position).normalized()
-	velocity = direction * impulse_acceleration
-	impulse_distance -= impulse_acceleration
-
-	if impulse_distance <= 0:
-		last_position_player = null
-		impulse_distance = 5000.0
-		scale = Vector2(1, 1)
-		velocity = Vector2.ZERO
-		current_state = STATE.IDLE
-
-func rebound_around(delta: float) -> void :
-	var collision = move_and_collide(velocity * rebound_velocity * delta)
-	if collision:
-		var normal = collision.get_normal()
-		velocity = velocity.bounce(normal)
-
-func explotion():
-	if !is_explotion_bullet:
-		is_explotion_bullet = true
-
-		for i in range(num_bullets):
-			var angle = (2 * PI / num_bullets) * i
-			var dir = Vector2(cos(angle), sin(angle)).normalized()
-			spawn_bullet(global_position, dir, bullet_speed, bullet_range)
-
-func spawn_bullet(start_position: Vector2, dir: Vector2, speed_bullet: float, max_distance: float):
-	var bullet = bullet_scene.instantiate()
-	bullet.global_position = start_position
-	bullet.velocity = dir * speed_bullet
-	bullet.max_distance = max_distance
-	add_sibling(bullet)
-
-func enemy_death():
-	animated_sprite.play("death")
-	collision_shape.disabled = true
-	#$detection.queue_free()
-	timer_damaged_effect.stop()
-	if must_explotion:
-		explotion()
-
-func fire_to_player():
-	if player:
-		var bullet = bullet_scene.instantiate()
-		bullet.position = position
-		last_position_player = (player.position - position).normalized()
-		bullet.velocity = last_position_player * fire_velocity
-		get_tree().current_scene.add_child(bullet)
-
-func search_for_player(delta: float) -> void :
-	var random_target = player.position + random_offset
-	direction = (random_target - position).normalized()
-	velocity = direction * speed
-
-	var distance_to_player = position.distance_to(player.position)
-
-	if distance_to_player < follow_distance:
+func search_for_player(_delta: float) -> void:
+	var random_target := player.global_position + random_offset
+	velocity = (random_target - global_position).normalized() * speed
+	if global_position.distance_to(player.global_position) < follow_distance:
 		current_state = STATE.FOLLOW
 		is_randoming = false
 
-func random_position_to_follow():
-	random_angle = randf_range(0, 2 * PI)
-	random_distance = randf_range(0, 300)
+func random_position_to_follow() -> void:
+	random_angle = randf_range(0.0, 2.0 * PI)
+	random_distance = randi_range(0, 300)
 	random_offset = Vector2(cos(random_angle), sin(random_angle)) * random_distance
 	follow_distance = randi_range(190, 220)
 
-func _on_area_2d_area_entered(area: Area2D) -> void :
-	if area.is_in_group("shoot"):
-		lifes_enemy -= 1
-		damaged()
+func fire_to_player() -> void:
+	if not is_instance_valid(player) or bullet_scene == null:
+		return
+	var bullet := bullet_scene.instantiate()
+	bullet.global_position = global_position
+	bullet.velocity_vec = (player.global_position - global_position).normalized() * fire_velocity
+	get_tree().current_scene.add_child(bullet)
 
-func _on_area_2d_body_entered(body: Node2D) -> void :
-	if body.is_in_group("player") and not GLOBAL.player_is_immune:
-		lifes_enemy -= 1
-		GLOBAL.lifes_player -= 1
-		GLOBAL.player_is_immune = true
-		damaged()
+func explotion() -> void:
+	if is_explotion_bullet:
+		return
+	is_explotion_bullet = true
+	for i in range(num_bullets):
+		var angle := (2.0 * PI / num_bullets) * i
+		spawn_bullet(global_position,
+			Vector2(cos(angle), sin(angle)).normalized(),
+			bullet_speed, bullet_range)
 
-func _on_timer_damaged_efect_timeout() -> void :
-	modulate = Color(1.0, 1.0, 1.0)
+func spawn_bullet(pos: Vector2, dir: Vector2, spd: float, max_dist: float) -> void:
+	if bullet_scene == null:
+		return
+	var bullet := bullet_scene.instantiate()
+	bullet.global_position = pos
+	bullet.velocity_vec = dir * spd
+	bullet.max_distance = max_dist
+	add_sibling(bullet)
 
-func _on_animated_sprite_2d_animation_finished() -> void :
-	if animated_sprite.animation == "death":
-		queue_free()
+func on_died() -> void:
+	if must_explotion:
+		explotion()
 
-func _on_timer_timeout() -> void :
-	fire_to_player()
-	timer_shoot.wait_time = randf_range(1, 3)
-
-func _on_area_detection_body_entered(body: Node2D) -> void :
+func _on_detection_target_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
 		current_state = STATE.FOLLOW_IA
 
-func _on_timer_random_follow_timeout() -> void :
-	random_position_to_follow()
-
-#func random_explotion():
-	#num_bullets = randi_range(6, 12)
-	#bullet_speed = randi_range(250, 330)
-	#bullet_range = 1000.0
+func _on_timer_timeout() -> void:
+	fire_to_player()
+	timer_shoot.wait_time = randf_range(1.0, 3.0)
+	timer_shoot.start()

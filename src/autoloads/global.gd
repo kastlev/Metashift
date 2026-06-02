@@ -1,10 +1,12 @@
 extends Node
 
-var frame_sprite_player_index
-var position_player: Vector2
-var lifes_player: int = 2
-var player_is_immune = false
-var level: float
+
+var previous_scene_path: String
+var frame_sprite_player_index: int
+var last_position_player: Vector2
+
+var score: int
+var level: int
 
 func _ready() -> void :
 	level = 1

@@ -4,6 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://dfm76vdop74nd" path="res://src/entities/enemies/base/bullet_enemy.tscn" id="2_ye4fq"]
 [ext_resource type="Texture2D" uid="uid://dima6spmq81gg" path="res://art/images/enemys/death_animation_final_3-Sheet.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://cps6t2srsrbt7" path="res://art/images/enemys/enemy_01-Sheet.png" id="4"]
+[ext_resource type="Script" uid="uid://1gysj4qvljlo" path="res://src/components/health_component.gd" id="5_a7eir"]
+[ext_resource type="Script" uid="uid://dpchwl51pc0ui" path="res://src/components/health_data.gd" id="6_6b0yw"]
+[ext_resource type="Script" uid="uid://b60ilrpl5gqt3" path="res://src/components/flashComponent.gd" id="7_v6qvl"]
+[ext_resource type="Script" uid="uid://dlgfycrugjthu" path="res://src/components/hurtbox_component.gd" id="8_6b0yw"]
+[ext_resource type="Script" uid="uid://c0cbgx52630x1" path="res://src/components/detection_component.gd" id="9_v6qvl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_57t6x"]
 atlas = ExtResource("3")
@@ -55,13 +60,17 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5trun"]
 
+[sub_resource type="Resource" id="Resource_0clgm"]
+script = ExtResource("6_6b0yw")
+metadata/_custom_type_script = "uid://dpchwl51pc0ui"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_osp5n"]
 size = Vector2(65.6563, 48.1563)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_efgd4"]
 radius = 186.011
 
-[node name="EnemyBasic" type="CharacterBody2D" unique_id=1247254801]
+[node name="EnemyButterfly" type="CharacterBody2D" unique_id=1247254801 groups=["enemy"]]
 motion_mode = 1
 script = ExtResource("1")
 bullet_scene = ExtResource("2_ye4fq")
@@ -77,34 +86,33 @@ autoplay = "default"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1257279173]
 shape = SubResource("RectangleShape2D_5trun")
 
-[node name="AreaDamage" type="Area2D" parent="." unique_id=914836320 groups=["enemy"]]
+[node name="HealthComponent" type="Node" parent="." unique_id=243353079]
 unique_name_in_owner = true
+script = ExtResource("5_a7eir")
+data = SubResource("Resource_0clgm")
+metadata/_custom_type_script = "uid://1gysj4qvljlo"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDamage" unique_id=964980430]
+[node name="FlashComponent" type="Node" parent="." unique_id=1249233631 node_paths=PackedStringArray("sprite")]
+unique_name_in_owner = true
+script = ExtResource("7_v6qvl")
+sprite = NodePath("../AnimatedSprite2D")
+metadata/_custom_type_script = "uid://b60ilrpl5gqt3"
+
+[node name="HurtboxComponent" type="Area2D" parent="." unique_id=914836320 groups=["enemy"]]
+unique_name_in_owner = true
+script = ExtResource("8_6b0yw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=964980430]
 shape = SubResource("RectangleShape2D_osp5n")
 
-[node name="VisibleOnScreen" type="VisibleOnScreenNotifier2D" parent="AreaDamage" unique_id=2054916636]
-process_mode = 4
-
-[node name="AreaDetection" type="Area2D" parent="." unique_id=1773182545]
+[node name="DetectionComponent" type="Area2D" parent="." unique_id=1773182545]
 unique_name_in_owner = true
+script = ExtResource("9_v6qvl")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDetection" unique_id=1360361506]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent" unique_id=1360361506]
 shape = SubResource("CircleShape2D_efgd4")
 
-[node name="TimerDamagedEffect" type="Timer" parent="." unique_id=1701284064]
-unique_name_in_owner = true
-wait_time = 0.1
-one_shot = true
-
-[node name="TimerShoot" type="Timer" parent="." unique_id=1901405682]
+[node name="TimerShoot" type="Timer" parent="." unique_id=742256509]
 unique_name_in_owner = true
 wait_time = 2.0
 autostart = true
-
-[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="area_entered" from="AreaDamage" to="." method="_on_area_2d_area_entered"]
-[connection signal="body_entered" from="AreaDamage" to="." method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="AreaDetection" to="." method="_on_area_detection_body_entered"]
-[connection signal="timeout" from="TimerDamagedEffect" to="." method="_on_timer_damaged_efect_timeout"]
-[connection signal="timeout" from="TimerShoot" to="." method="_on_timer_timeout"]

@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ces1b4b2cxm5b" path="res://src/entities/player/player.tscn" id="6"]
 [ext_resource type="Texture2D" uid="uid://ck2v53j7w4phg" path="res://art/images/hud/lifes.png" id="7"]
 [ext_resource type="FontFile" uid="uid://bsanmgeyeko30" path="res://art/fonts/Jersey10-Regular.ttf" id="8"]
-[ext_resource type="PackedScene" uid="uid://dyy5qut610exk" path="res://src/screens/limit_world.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://dyy5qut610exk" path="res://src/map/limit_world.tscn" id="9"]
 [ext_resource type="Texture2D" uid="uid://denynd8bnl2vi" path="res://art/images/hud/reticle.png" id="10"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rj76v"]
@@ -127,34 +127,12 @@ unique_name_in_owner = true
 position = Vector2(1160, -3)
 rotation = -3.1407359
 
-[node name="SpawnerEnemy" type="Timer" parent="." unique_id=683546257]
+[node name="SpawnerEnemy" type="Timer" parent="Game" unique_id=683546257]
 unique_name_in_owner = true
 
-[node name="TimerLevel" type="Timer" parent="." unique_id=475727500]
+[node name="TimerLevel" type="Timer" parent="Game" unique_id=475727500]
 unique_name_in_owner = true
 wait_time = 9.0
 
-[node name="TimerImmune" type="Timer" parent="." unique_id=173337776]
-unique_name_in_owner = true
-one_shot = true
-
-[node name="BlinkTimer" type="Timer" parent="." unique_id=187432267]
-unique_name_in_owner = true
-wait_time = 0.08
-
-[node name="LevelFinished" type="Timer" parent="." unique_id=1324887610]
-unique_name_in_owner = true
-wait_time = 50.0
-one_shot = true
-
-[node name="TimerWin" type="Timer" parent="." unique_id=154127000]
-unique_name_in_owner = true
-one_shot = true
-
-[connection signal="hurt_player" from="." to="Player" method="_on_level_hurt_player"]
-[connection signal="timeout" from="SpawnerEnemy" to="." method="_on_spawn_enemy_timeout"]
-[connection signal="timeout" from="TimerLevel" to="." method="_on_timer_level_timeout"]
-[connection signal="timeout" from="TimerImmune" to="." method="_on_timer_immune_timeout"]
-[connection signal="timeout" from="BlinkTimer" to="." method="_on_blink_timer_timeout"]
-[connection signal="timeout" from="LevelFinished" to="." method="_on_timer_stop_mobs_timeout"]
-[connection signal="timeout" from="TimerWin" to="." method="_on_timer_win_timeout"]
+[connection signal="timeout" from="Game/SpawnerEnemy" to="." method="_on_spawn_enemy_timeout"]
+[connection signal="timeout" from="Game/TimerLevel" to="." method="_on_timer_level_timeout"]

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bxnih2xtkjk4y"]
 
 [ext_resource type="Script" uid="uid://fc76p1rvs200" path="res://src/screens/game_over.gd" id="1_gi1vw"]
-[ext_resource type="PackedScene" uid="uid://bmkpa5lydfqf6" path="res://src/level.tscn" id="2_h1mia"]
 [ext_resource type="Texture2D" uid="uid://dp378kumne67j" path="res://art/images/player/player_sheet_idle.png" id="2_mg20t"]
 [ext_resource type="FontFile" uid="uid://bsanmgeyeko30" path="res://art/fonts/Jersey10-Regular.ttf" id="3_h1mia"]
 
@@ -55,7 +54,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gi1vw")
-next_level = ExtResource("2_h1mia")
 
 [node name="Player" type="AnimatedSprite2D" parent="." unique_id=209938761]
 unique_name_in_owner = true
@@ -85,14 +83,14 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=530909033]
+[node name="GameOverLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=530909033]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_h1mia")
 theme_override_font_sizes/font_size = 90
 text = "GAME OVER"
 
-[node name="Button" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1482246244]
+[node name="RetryButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1482246244]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_hover_color = Color(1, 0.682119, 0.631921, 1)
@@ -102,25 +100,3 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_kxd6b")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nq38f")
 shortcut = SubResource("Shortcut_23y1t")
 text = "Try again"
-
-[node name="TimerShowText" type="Timer" parent="." unique_id=1303987267]
-unique_name_in_owner = true
-wait_time = 2.0
-one_shot = true
-
-[node name="TimerDeletePlayer" type="Timer" parent="." unique_id=17612036]
-unique_name_in_owner = true
-wait_time = 0.5
-one_shot = true
-autostart = true
-
-[node name="TimerShowButton" type="Timer" parent="." unique_id=1554131700]
-unique_name_in_owner = true
-wait_time = 4.0
-one_shot = true
-autostart = true
-
-[connection signal="pressed" from="CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
-[connection signal="timeout" from="TimerShowText" to="." method="_on_timer_show_text_timeout"]
-[connection signal="timeout" from="TimerDeletePlayer" to="." method="_on_timer_delete_player_timeout"]
-[connection signal="timeout" from="TimerShowButton" to="." method="_on_timer_show_button_timeout"]
