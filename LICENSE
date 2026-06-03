@@ -1,18 +1,19 @@
-Game from Game Jam
-
-Copyright (c) 2026 Frank Castillo
-
-Code License
-============
-
-All source code in this repository (including .gd, .cs, shaders, and other programming-related files) is licensed under the MIT License.
-
-See: https://opensource.org/licenses/MIT
-
-
 Assets License
 ==============
 
-All artwork, sprites, animations, sound effects, music, dialogue, and other creative content are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0).
+Unless otherwise noted, all original artwork, sprites,
+animations, sound effects, music, dialogue and other
+creative content created for this game are licensed under:
 
-See: https://creativecommons.org/licenses/by-nc-sa/4.0/
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+International (CC BY-NC-SA 4.0)
+
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Third-Party Assets
+==================
+
+Some sound effects and assets are from Kenney.nl and are
+licensed separately under CC0 1.0 Universal.
+
+https://kenney.nl
