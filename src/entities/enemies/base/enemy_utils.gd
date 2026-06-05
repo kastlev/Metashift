@@ -34,11 +34,11 @@ static func explotion(
 		bullet.global_position = origin
 		bullet.velocity_vec = Vector2(cos(angle), sin(angle)).normalized() * bullet_speed
 		bullet.max_distance = bullet_range
-		parent.add_sibling(bullet)
+		parent.call_deferred("add_sibling",bullet)
 
 
 ## Mueve hacia un punto aleatorio cerca del jugador
-static func calc_random_offset() -> Vector2:
+static func calc_wander_target_offset() -> Vector2:
 	var angle := randf_range(0.0, 2.0 * PI)
 	var dist := randf_range(0.0, 300.0)
 	return Vector2(cos(angle), sin(angle)) * dist

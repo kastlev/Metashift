@@ -19,6 +19,8 @@ config/icon="res://art/images/hud/lifes.png"
 [autoload]
 
 GLOBAL="*res://src/autoloads/global.gd"
+SceneLoader="*uid://bwlniyy5k4qh4"
+GameCameraService="*uid://bnbcbopagnabk"
 
 [display]
 

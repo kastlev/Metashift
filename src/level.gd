@@ -1,5 +1,6 @@
 extends Node
 
+
 @export var enemy_scenes: Array[PackedScene]
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
@@ -21,6 +22,8 @@ var amount_enemy: int = 0
 var can_win: bool = false
 var tutorial_done: bool = false
 var waiting_for_input: bool = false
+var _blink_tween: Tween
+
 
 func _ready() -> void:
 	player.health.damaged.connect(_on_health_player_change)
@@ -28,27 +31,42 @@ func _ready() -> void:
 	_on_health_player_change()
 	player.position = start_position_player.position
 	text_tutorial.visible = false
+	text_tutorial.modulate.a = 0.0
 	lighted_cender.energy = 0
+	_blink_tween = _start_blink()
+	_blink_tween.pause()
 
-func _process(delta: float) -> void:
+
+func _process(_delta: float) -> void:
 	reticle.global_position = get_viewport().get_mouse_position()
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 	if lighted_cender.energy < LIGHT_TARGET:
 		lighted_cender.energy = minf(lighted_cender.energy + LIGHT_SPEED, LIGHT_TARGET)
 	elif not tutorial_done and not waiting_for_input:
-		text_tutorial.visible = true
 		waiting_for_input = true
+		text_tutorial.visible = true
+		_blink_tween.play()
 
 	if waiting_for_input and Input.is_action_just_pressed("continue"):
 		_start_game()
 
 	if can_win and get_tree().get_nodes_in_group("enemy").size() == 0:
-		get_tree().change_scene_to_file("res://src/screens/win.tscn")
+		SceneLoader.load_scene("res://src/screens/win.tscn")
+
+
+func _start_blink() -> Tween:
+	var tween := create_tween().set_loops()
+	tween.tween_property(text_tutorial, "modulate:a", 1.0, 0.5)
+	tween.tween_interval(2.0)  # pausa visible antes de desvanecerse
+	tween.tween_property(text_tutorial, "modulate:a", 0.0, 0.5)
+	tween.tween_interval(0.3)  # pausa invisible antes de volver
+	return tween
+
 
 func _on_health_player_change(_dir: Vector2 = Vector2.ZERO) -> void:
 	lifes.text = str(player.health.current_health)
-	print("vida cambiada")
+
 
 func _on_player_died() -> void:
 	GLOBAL.previous_scene_path = get_tree().current_scene.scene_file_path
@@ -57,27 +75,30 @@ func _on_player_died() -> void:
 func _on_spawn_enemy_timeout() -> void:
 	if amount_enemy >= MAX_ENEMY:
 		return
-	# Intervalo según nivel
 	var wait_ranges := [[2.0, 2.5], [1.6, 2.0], [1.0, 1.6], [0.7, 1.0]]
 	var idx := clampi(GLOBAL.level - 1, 0, wait_ranges.size() - 1)
 	timer_spawner_enemy.wait_time = randf_range(wait_ranges[idx][0], wait_ranges[idx][1])
-
 	var enemy := enemy_scenes[randi() % enemy_scenes.size()].instantiate()
 	path_spawn_enemy.progress_ratio = randf()
 	enemy.position = path_spawn_enemy.position
 	add_child(enemy)
 	amount_enemy += 1
 
+
 func _on_timer_level_timeout() -> void:
 	GLOBAL.level += 1
 
+
 func _start_game() -> void:
+	_blink_tween.kill()
+	text_tutorial.modulate.a = 1.0
 	text_tutorial.visible = false
 	waiting_for_input = false
 	tutorial_done = true
 	timer_spawner_enemy.start()
 	timer_level.start()
 	_start_win_timer()
+
 
 func _start_win_timer() -> void:
 	await get_tree().create_timer(WIN_DELAY).timeout

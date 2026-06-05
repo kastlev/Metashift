@@ -1,15 +1,19 @@
 [gd_scene format=3 uid="uid://bmkpa5lydfqf6"]
 
 [ext_resource type="Script" uid="uid://de1d2vmlrxsti" path="res://src/level.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://cpm4pb51vbtrr" path="res://src/entities/enemies/enemy_basic.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://ctpv2pyhumre7" path="res://src/entities/enemies/enemy_dashing.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://ctnhkvtdyjfn8" path="res://src/entities/enemies/enemy_rebound.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://cpm4pb51vbtrr" path="res://src/entities/enemies/enemy_butterfly.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://ctpv2pyhumre7" path="res://src/entities/enemies/enemy_bee.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://ctnhkvtdyjfn8" path="res://src/entities/enemies/enemy_fly.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://dngq4jxe6dflr" path="res://art/images/backgrouds/background.png" id="5"]
 [ext_resource type="PackedScene" uid="uid://ces1b4b2cxm5b" path="res://src/entities/player/player.tscn" id="6"]
 [ext_resource type="Texture2D" uid="uid://ck2v53j7w4phg" path="res://art/images/hud/lifes.png" id="7"]
+[ext_resource type="Shader" uid="uid://bsiwrrcvjxgh1" path="res://src/shaders/color_correction.gdshader" id="7_8osof"]
+[ext_resource type="Shader" uid="uid://87w8llcjm1fg" path="res://src/shaders/vhs_and_crt_monitor.gdshader" id="7_cl2ww"]
+[ext_resource type="Shader" uid="uid://bjh0mq3bwdrki" path="res://src/shaders/vhs_with_wiggle.gdshader" id="7_d35cb"]
 [ext_resource type="FontFile" uid="uid://bsanmgeyeko30" path="res://art/fonts/Jersey10-Regular.ttf" id="8"]
 [ext_resource type="PackedScene" uid="uid://dyy5qut610exk" path="res://src/map/limit_world.tscn" id="9"]
 [ext_resource type="Texture2D" uid="uid://denynd8bnl2vi" path="res://art/images/hud/reticle.png" id="10"]
+[ext_resource type="Script" uid="uid://bdefyhhaat5bj" path="res://src/systems/camera/shake_camera.gd" id="11_lmnmg"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rj76v"]
 blend_mode = 1
@@ -24,6 +28,73 @@ width = 256
 height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4fcaq"]
+shader = ExtResource("7_d35cb")
+shader_parameter/wiggle = 0.15999999642368
+shader_parameter/wiggle_speed = 0.0
+shader_parameter/smear = 0.8410000399475001
+shader_parameter/blur_samples = 15
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cl2ww"]
+shader = ExtResource("7_8osof")
+shader_parameter/master_hue = -0.4999973252346024
+shader_parameter/shadow_hue = -180.0
+shader_parameter/low_mid_hue = 34.30000319332717
+shader_parameter/mid_hue = 85.70000395924882
+shader_parameter/up_mid_hue = 0.0
+shader_parameter/high_hue = 0.0
+shader_parameter/master_sat = 0.746000035435
+shader_parameter/shadow_sat = 1.1950000567625
+shader_parameter/low_mid_sat = 1.0800000513
+shader_parameter/mid_sat = 1.0
+shader_parameter/up_mid_sat = 1.0
+shader_parameter/high_sat = 1.0
+shader_parameter/master_val = 0.8890000422275
+shader_parameter/shadow_val = -0.21599998418092992
+shader_parameter/low_mid_val = -0.0299999753459299
+shader_parameter/mid_val = -0.13999998057093
+shader_parameter/up_mid_val = 0.0
+shader_parameter/high_val = 0.43200004659907
+shader_parameter/contrast = 1.10000024225
+shader_parameter/pivot = 0.0630000029925
+shader_parameter/enable_colour_splash = true
+shader_parameter/primary_hue = 0.0
+shader_parameter/primary_range = 0.422000020045
+shader_parameter/primary_strength = 0.999999977648
+shader_parameter/enable_secondary = false
+shader_parameter/secondary_hue = 0.0
+shader_parameter/secondary_range = 0.1710000081225
+shader_parameter/secondary_strength = 1.999999955296
+shader_parameter/desat_outside = 0.76999998278896
+shader_parameter/monochrome_mode = false
+shader_parameter/tint_strength = 0.0
+shader_parameter/tint_color = Color(1.2, 1, 0.8, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8osof"]
+resource_local_to_scene = true
+shader = ExtResource("7_cl2ww")
+shader_parameter/overlay = true
+shader_parameter/scanlines_opacity = 0.0370000017575
+shader_parameter/scanlines_width = 0.202000009595
+shader_parameter/grille_opacity = 0.30000001425
+shader_parameter/resolution = Vector2(640, 480)
+shader_parameter/pixelate = true
+shader_parameter/roll = false
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 0.0
+shader_parameter/roll_variation = 0.89000003901512
+shader_parameter/distort_intensity = 0.05
+shader_parameter/noise_opacity = 0.4330000205675
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.1600000076
+shader_parameter/aberration = -0.02199995354499995
+shader_parameter/brightness = 1.4
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 0.066000003135
+shader_parameter/clip_warp = false
+shader_parameter/vignette_intensity = 0.32
+shader_parameter/vignette_opacity = 0.6210000294975
 
 [sub_resource type="Curve2D" id="Curve2D_qkwvq"]
 _data = {
@@ -66,12 +137,58 @@ scale = Vector2(3, 3)
 texture = ExtResource("5")
 metadata/_edit_lock_ = true
 
+[node name="CanvasLayer" type="CanvasLayer" parent="Ambient" unique_id=1747609686]
+
+[node name="background_shader3" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=1767228899]
+material = SubResource("ShaderMaterial_4fcaq")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="background_shader2" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=985855584]
+visible = false
+material = SubResource("ShaderMaterial_cl2ww")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="background_shader" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=183822755]
+visible = false
+material = SubResource("ShaderMaterial_8osof")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1.353256, 1.353256, 1.353256, 1)
+
 [node name="Hud" type="Node" parent="." unique_id=773558398]
 
 [node name="Heart" type="Sprite2D" parent="Hud" unique_id=1564982352]
 position = Vector2(26, 24)
 scale = Vector2(3, 3)
 texture = ExtResource("7")
+
+[node name="Reticle" type="Sprite2D" parent="Hud" unique_id=1871262358]
+unique_name_in_owner = true
+z_index = 10
+position = Vector2(-75, 223)
+scale = Vector2(3, 3)
+texture = ExtResource("10")
+
+[node name="Lifes" type="Label" parent="Hud" unique_id=266433679]
+unique_name_in_owner = true
+offset_left = 15.0
+offset_top = 10.0
+offset_right = 34.0
+offset_bottom = 33.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "6"
+horizontal_alignment = 1
 
 [node name="TextTutorial" type="Label" parent="Hud" unique_id=1381830542]
 unique_name_in_owner = true
@@ -83,6 +200,8 @@ offset_top = 33.0
 offset_right = 312.0
 offset_bottom = 666.0
 grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0.4359535, 0.4359535, 0.4359535, 0.21568628)
+theme_override_constants/shadow_offset_x = 6
 theme_override_fonts/font = ExtResource("8")
 theme_override_font_sizes/font_size = 45
 text = "[WASD] to move, [space] to dash and [Left Mouse Button] to shoot
@@ -97,23 +216,6 @@ text = "[WASD] to move, [space] to dash and [Left Mouse Button] to shoot
 press [Enter] to start"
 horizontal_alignment = 1
 autowrap_mode = 2
-
-[node name="Lifes" type="Label" parent="Hud" unique_id=266433679]
-unique_name_in_owner = true
-offset_left = 15.0
-offset_top = 10.0
-offset_right = 34.0
-offset_bottom = 33.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-text = "6"
-horizontal_alignment = 1
-
-[node name="Reticle" type="Sprite2D" parent="Hud" unique_id=1871262358]
-unique_name_in_owner = true
-z_index = 10
-position = Vector2(-75, 223)
-scale = Vector2(3, 3)
-texture = ExtResource("10")
 
 [node name="Game" type="Node" parent="." unique_id=1678025465]
 
@@ -133,6 +235,15 @@ unique_name_in_owner = true
 [node name="TimerLevel" type="Timer" parent="Game" unique_id=475727500]
 unique_name_in_owner = true
 wait_time = 9.0
+
+[node name="ShakeCamera" type="Camera2D" parent="." unique_id=1603145003]
+anchor_mode = 0
+script = ExtResource("11_lmnmg")
+shake_type = 0
+shake_multiplier = 2.0
+metadata/_custom_type_script = "uid://bdefyhhaat5bj"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2088506538]
 
 [connection signal="timeout" from="Game/SpawnerEnemy" to="." method="_on_spawn_enemy_timeout"]
 [connection signal="timeout" from="Game/TimerLevel" to="." method="_on_timer_level_timeout"]

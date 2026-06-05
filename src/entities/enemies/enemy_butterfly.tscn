@@ -1,33 +1,43 @@
 [gd_scene format=3 uid="uid://cpm4pb51vbtrr"]
 
-[ext_resource type="Script" uid="uid://c8h8c8qd2bmpt" path="res://src/entities/enemies/enemy_basic.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://dfm76vdop74nd" path="res://src/entities/enemies/base/bullet_enemy.tscn" id="2_ye4fq"]
-[ext_resource type="Texture2D" uid="uid://dima6spmq81gg" path="res://art/images/enemys/death_animation_final_3-Sheet.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://cps6t2srsrbt7" path="res://art/images/enemys/enemy_01-Sheet.png" id="4"]
-[ext_resource type="Script" uid="uid://1gysj4qvljlo" path="res://src/components/health_component.gd" id="5_a7eir"]
-[ext_resource type="Script" uid="uid://dpchwl51pc0ui" path="res://src/components/health_data.gd" id="6_6b0yw"]
-[ext_resource type="Script" uid="uid://b60ilrpl5gqt3" path="res://src/components/flashComponent.gd" id="7_v6qvl"]
-[ext_resource type="Script" uid="uid://dlgfycrugjthu" path="res://src/components/hurtbox_component.gd" id="8_6b0yw"]
-[ext_resource type="Script" uid="uid://c0cbgx52630x1" path="res://src/components/detection_component.gd" id="9_v6qvl"]
+[ext_resource type="Shader" uid="uid://d4c34laa25vd0" path="res://src/shaders/color_swap_sprite.gdshader" id="1_g1hry"]
+[ext_resource type="Script" uid="uid://c8h8c8qd2bmpt" path="res://src/entities/enemies/enemy_butterfly.gd" id="1_ls6xm"]
+[ext_resource type="PackedScene" uid="uid://dfm76vdop74nd" path="res://src/entities/enemies/base/bullet_enemy.tscn" id="2_pecx0"]
+[ext_resource type="Texture2D" uid="uid://dima6spmq81gg" path="res://art/images/enemys/death_animation_final_3-Sheet.png" id="3_go6gt"]
+[ext_resource type="Texture2D" uid="uid://cps6t2srsrbt7" path="res://art/images/enemys/enemy_01-Sheet.png" id="4_g1hry"]
+[ext_resource type="Script" uid="uid://1gysj4qvljlo" path="res://src/components/health_component.gd" id="5_yccch"]
+[ext_resource type="Script" uid="uid://dpchwl51pc0ui" path="res://src/components/health_data.gd" id="6_fu0oh"]
+[ext_resource type="Script" uid="uid://b60ilrpl5gqt3" path="res://src/components/flashComponent.gd" id="7_np0ty"]
+[ext_resource type="Script" uid="uid://dlgfycrugjthu" path="res://src/components/hurtbox_component.gd" id="8_wjsvg"]
+[ext_resource type="Script" uid="uid://c0cbgx52630x1" path="res://src/components/detection_component.gd" id="9_uq1fr"]
+[ext_resource type="Script" uid="uid://donfc4y1yc4fy" path="res://src/components/hitbox_component.gd" id="10_pecx0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fu0oh"]
+shader = ExtResource("1_g1hry")
+shader_parameter/from = Color(0, 0, 0, 1)
+shader_parameter/to = Color(0, 0, 0, 1)
+shader_parameter/tolerance = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_np0ty"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_57t6x"]
-atlas = ExtResource("3")
+atlas = ExtResource("3_go6gt")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tca5x"]
-atlas = ExtResource("3")
+atlas = ExtResource("3_go6gt")
 region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nhlc2"]
-atlas = ExtResource("4")
+atlas = ExtResource("4_g1hry")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ggpgo"]
-atlas = ExtResource("4")
+atlas = ExtResource("4_g1hry")
 region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23myu"]
-atlas = ExtResource("4")
+atlas = ExtResource("4_g1hry")
 region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jql5w"]
@@ -61,24 +71,30 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5trun"]
 
 [sub_resource type="Resource" id="Resource_0clgm"]
-script = ExtResource("6_6b0yw")
+script = ExtResource("6_fu0oh")
 metadata/_custom_type_script = "uid://dpchwl51pc0ui"
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_osp5n"]
-size = Vector2(65.6563, 48.1563)
+[sub_resource type="CircleShape2D" id="CircleShape2D_ls6xm"]
+radius = 34.0147
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_efgd4"]
 radius = 186.011
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_go6gt"]
+radius = 22.0
+
 [node name="EnemyButterfly" type="CharacterBody2D" unique_id=1247254801 groups=["enemy"]]
+material = SubResource("ShaderMaterial_fu0oh")
 motion_mode = 1
-script = ExtResource("1")
-bullet_scene = ExtResource("2_ye4fq")
+script = ExtResource("1_ls6xm")
+bullet_scene = ExtResource("2_pecx0")
+speed = 230.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1344006574]
 unique_name_in_owner = true
 texture_filter = 1
 texture_repeat = 2
+material = SubResource("ShaderMaterial_np0ty")
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_jql5w")
 autoplay = "default"
@@ -88,31 +104,36 @@ shape = SubResource("RectangleShape2D_5trun")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=243353079]
 unique_name_in_owner = true
-script = ExtResource("5_a7eir")
+script = ExtResource("5_yccch")
 data = SubResource("Resource_0clgm")
 metadata/_custom_type_script = "uid://1gysj4qvljlo"
 
 [node name="FlashComponent" type="Node" parent="." unique_id=1249233631 node_paths=PackedStringArray("sprite")]
 unique_name_in_owner = true
-script = ExtResource("7_v6qvl")
+script = ExtResource("7_np0ty")
 sprite = NodePath("../AnimatedSprite2D")
 metadata/_custom_type_script = "uid://b60ilrpl5gqt3"
 
 [node name="HurtboxComponent" type="Area2D" parent="." unique_id=914836320 groups=["enemy"]]
 unique_name_in_owner = true
-script = ExtResource("8_6b0yw")
+script = ExtResource("8_wjsvg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=964980430]
-shape = SubResource("RectangleShape2D_osp5n")
+visible = false
+shape = SubResource("CircleShape2D_ls6xm")
 
 [node name="DetectionComponent" type="Area2D" parent="." unique_id=1773182545]
 unique_name_in_owner = true
-script = ExtResource("9_v6qvl")
+script = ExtResource("9_uq1fr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent" unique_id=1360361506]
+visible = false
 shape = SubResource("CircleShape2D_efgd4")
 
-[node name="TimerShoot" type="Timer" parent="." unique_id=742256509]
-unique_name_in_owner = true
-wait_time = 2.0
-autostart = true
+[node name="HitboxComponent" type="Area2D" parent="." unique_id=582170359]
+script = ExtResource("10_pecx0")
+metadata/_custom_type_script = "uid://donfc4y1yc4fy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1198679414]
+visible = false
+shape = SubResource("CircleShape2D_go6gt")

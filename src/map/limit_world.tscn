@@ -8,20 +8,20 @@ size = Vector2(686.25, 19.5)
 
 [node name="limit" type="StaticBody2D" unique_id=2065008224 groups=["wall"]]
 
-[node name="WallTop" type="CollisionShape2D" parent="." unique_id=1088227505]
+[node name="WallTop" type="CollisionShape2D" parent="." unique_id=1088227505 groups=["wall"]]
 position = Vector2(563, -27)
 shape = SubResource("RectangleShape2D_n5ygq")
 
-[node name="WallDown" type="CollisionShape2D" parent="." unique_id=1702294277]
+[node name="WallDown" type="CollisionShape2D" parent="." unique_id=1702294277 groups=["wall"]]
 position = Vector2(563, 675)
 shape = SubResource("RectangleShape2D_n5ygq")
 
-[node name="WallLeft" type="CollisionShape2D" parent="." unique_id=1664136957]
+[node name="WallLeft" type="CollisionShape2D" parent="." unique_id=1664136957 groups=["wall"]]
 position = Vector2(-28, 333)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_emose")
 
-[node name="WallRight" type="CollisionShape2D" parent="." unique_id=236316308]
+[node name="WallRight" type="CollisionShape2D" parent="." unique_id=236316308 groups=["wall"]]
 position = Vector2(1182, 325)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_emose")
