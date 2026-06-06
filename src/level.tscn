@@ -7,13 +7,14 @@
 [ext_resource type="Texture2D" uid="uid://dngq4jxe6dflr" path="res://art/images/backgrouds/background.png" id="5"]
 [ext_resource type="PackedScene" uid="uid://ces1b4b2cxm5b" path="res://src/entities/player/player.tscn" id="6"]
 [ext_resource type="Texture2D" uid="uid://ck2v53j7w4phg" path="res://art/images/hud/lifes.png" id="7"]
+[ext_resource type="Shader" uid="uid://btv8weqryik7s" path="res://src/shaders/circle_transition.gdshader" id="7_4fcaq"]
 [ext_resource type="Shader" uid="uid://bsiwrrcvjxgh1" path="res://src/shaders/color_correction.gdshader" id="7_8osof"]
 [ext_resource type="Shader" uid="uid://87w8llcjm1fg" path="res://src/shaders/vhs_and_crt_monitor.gdshader" id="7_cl2ww"]
-[ext_resource type="Shader" uid="uid://bjh0mq3bwdrki" path="res://src/shaders/vhs_with_wiggle.gdshader" id="7_d35cb"]
 [ext_resource type="FontFile" uid="uid://bsanmgeyeko30" path="res://art/fonts/Jersey10-Regular.ttf" id="8"]
 [ext_resource type="PackedScene" uid="uid://dyy5qut610exk" path="res://src/map/limit_world.tscn" id="9"]
 [ext_resource type="Texture2D" uid="uid://denynd8bnl2vi" path="res://art/images/hud/reticle.png" id="10"]
 [ext_resource type="Script" uid="uid://bdefyhhaat5bj" path="res://src/systems/camera/shake_camera.gd" id="11_lmnmg"]
+[ext_resource type="AudioStream" uid="uid://chdjug251vm0d" path="res://art/audio/ambient/engineCircular_002.ogg" id="15_4fcaq"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rj76v"]
 blend_mode = 1
@@ -29,12 +30,17 @@ height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k1pwd"]
+shader = ExtResource("7_4fcaq")
+shader_parameter/circle_size = 0.582000027645
+shader_parameter/screen_width = 10.0
+shader_parameter/screen_height = 5.0
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4fcaq"]
-shader = ExtResource("7_d35cb")
-shader_parameter/wiggle = 0.15999999642368
-shader_parameter/wiggle_speed = 0.0
-shader_parameter/smear = 0.8410000399475001
-shader_parameter/blur_samples = 15
+shader = ExtResource("7_4fcaq")
+shader_parameter/circle_size = 1.04999995231628
+shader_parameter/screen_width = 2.63
+shader_parameter/screen_height = 8.645
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cl2ww"]
 shader = ExtResource("7_8osof")
@@ -79,7 +85,7 @@ shader_parameter/scanlines_opacity = 0.0370000017575
 shader_parameter/scanlines_width = 0.202000009595
 shader_parameter/grille_opacity = 0.30000001425
 shader_parameter/resolution = Vector2(640, 480)
-shader_parameter/pixelate = true
+shader_parameter/pixelate = false
 shader_parameter/roll = false
 shader_parameter/roll_speed = 8.0
 shader_parameter/roll_size = 0.0
@@ -139,15 +145,27 @@ metadata/_edit_lock_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Ambient" unique_id=1747609686]
 
-[node name="background_shader3" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=1767228899]
+[node name="ColorRect" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=1081278707]
+visible = false
+material = SubResource("ShaderMaterial_k1pwd")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TransitionRect" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=1767228899]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_4fcaq")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0, 0, 0, 1)
 
-[node name="background_shader2" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=985855584]
+[node name="color_correction" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=985855584]
 visible = false
 material = SubResource("ShaderMaterial_cl2ww")
 anchors_preset = 15
@@ -156,7 +174,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="background_shader" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=183822755]
+[node name="vhs" type="ColorRect" parent="Ambient/CanvasLayer" unique_id=183822755]
 visible = false
 material = SubResource("ShaderMaterial_8osof")
 anchors_preset = 15
@@ -244,6 +262,13 @@ shake_multiplier = 2.0
 metadata/_custom_type_script = "uid://bdefyhhaat5bj"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2088506538]
+
+[node name="EngineCircular002" type="AudioStreamPlayer2D" parent="." unique_id=1051736446]
+position = Vector2(29, -195)
+stream = ExtResource("15_4fcaq")
+volume_db = -5.859
+pitch_scale = 0.69
+autoplay = true
 
 [connection signal="timeout" from="Game/SpawnerEnemy" to="." method="_on_spawn_enemy_timeout"]
 [connection signal="timeout" from="Game/TimerLevel" to="." method="_on_timer_level_timeout"]

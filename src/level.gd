@@ -13,6 +13,9 @@ extends Node
 @onready var timer_level: Timer = %TimerLevel
 @onready var timer_spawner_enemy: Timer = %SpawnerEnemy
 
+@onready var transition_rect = %TransitionRect
+
+
 const MAX_ENEMY: int = 50
 const WIN_DELAY: float = 50.0
 const LIGHT_TARGET: float = 1.7
@@ -35,7 +38,42 @@ func _ready() -> void:
 	lighted_cender.energy = 0
 	_blink_tween = _start_blink()
 	_blink_tween.pause()
+	_play_intro_transition()
+	
+func _play_intro_transition() -> void:
+	var mat = transition_rect.material
 
+	mat.set_shader_parameter("circle_size", 0.0)
+
+	var tween := create_tween()
+
+	tween.tween_method(
+		func(v):
+			mat.set_shader_parameter("circle_size", v),
+		0.0,
+		1.0,
+		1.0
+	)
+
+	await tween.finished
+	transition_rect.visible = false
+
+func _play_outro_transition() -> void:
+	transition_rect.visible = true
+
+	var mat = transition_rect.material
+
+	var tween := create_tween()
+
+	tween.tween_method(
+		func(v):
+			mat.set_shader_parameter("circle_size", v),
+		0.0,
+		1.0,
+		0.8
+	)
+
+	await tween.finished
 
 func _process(_delta: float) -> void:
 	reticle.global_position = get_viewport().get_mouse_position()

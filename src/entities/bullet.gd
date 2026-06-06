@@ -24,5 +24,9 @@ func _physics_process(delta: float) -> void:
 
 func _on_area_entered(area: Area2D) -> void:
 	if area is HurtboxComponent and area.owner.is_in_group(target_group):
+		if area.owner is Player:
+			var player = area.owner as Player
+			if player.is_invulnerable():
+				return
 		area.take_damage(damage)
 		queue_free()

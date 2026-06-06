@@ -34,6 +34,9 @@ func take_damage(damage: float, direction: Vector2 = Vector2.ZERO) -> void:
 	if current_health == 0.0:
 		died.emit()
 
+func grant_iframes(duration: float) -> void:
+	iframe_timer = maxf(iframe_timer, duration)
+
 func heal(amount: float) -> void:
 	current_health = clamp(current_health + amount, 0.0, data.max_health)
 	health_changed.emit(current_health, data.max_health)

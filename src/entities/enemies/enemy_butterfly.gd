@@ -35,6 +35,7 @@ func _create_shoot_timer() -> Timer:
 
 
 func update_behavior(delta: float) -> void:
+	material.set("shader_parameter/velocity",velocity)
 	match current_state:
 		STATE.CHASE:
 			_move_towards_player(delta)
