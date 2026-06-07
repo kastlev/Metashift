@@ -83,12 +83,14 @@ radius = 22.0
 
 [node name="EnemyBee" type="CharacterBody2D" unique_id=736086891 groups=["enemy"]]
 motion_mode = 1
+safe_margin = 20.0
 script = ExtResource("1_gku7h")
 bullet_scene = ExtResource("2_nj3f7")
 speed = 300.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1509156723]
 unique_name_in_owner = true
+z_index = 10
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_muad4")

@@ -42,11 +42,11 @@ func update_behavior(delta: float) -> void:
 		STATE.WANDER:
 			_move_towards__wander_target_offset(delta)
 
-
 func _move_towards_player(_delta: float) -> void:
 	if not is_instance_valid(player):
 		return
 	var dist := global_position.distance_to(player.global_position)
+	
 	if dist > follow_distance and not _is_wandering:
 		_is_wandering = true
 		_wander_target_offset = EnemyUtils.calc_wander_target_offset()
@@ -54,7 +54,6 @@ func _move_towards_player(_delta: float) -> void:
 		current_state = STATE.WANDER
 		return
 	velocity = (player.global_position - global_position).normalized() * speed
-
 
 func _move_towards__wander_target_offset(_delta: float) -> void:
 	if not is_instance_valid(player):

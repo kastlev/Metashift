@@ -67,7 +67,7 @@ bullet_scene = ExtResource("2_0mfjg")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1484769626]
 unique_name_in_owner = true
-z_index = 1
+z_index = 11
 texture_filter = 1
 material = SubResource("ShaderMaterial_n7e5a")
 scale = Vector2(3, 3)

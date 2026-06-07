@@ -81,12 +81,14 @@ radius = 22.0
 [node name="EnemyButterfly" type="CharacterBody2D" unique_id=1247254801 groups=["enemy"]]
 material = SubResource("ShaderMaterial_fu0oh")
 motion_mode = 1
+safe_margin = 20.0
 script = ExtResource("1_ls6xm")
 bullet_scene = ExtResource("2_pecx0")
 speed = 230.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1344006574]
 unique_name_in_owner = true
+z_index = 10
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_yccch")

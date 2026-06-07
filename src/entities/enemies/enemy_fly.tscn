@@ -83,12 +83,14 @@ radius = 22.0
 
 [node name="EnemyFly" type="CharacterBody2D" unique_id=845573052 groups=["enemy"]]
 motion_mode = 1
+safe_margin = 20.0
 script = ExtResource("1_eb487")
 bullet_scene = ExtResource("2_3nloh")
 speed = 500.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=424312543]
 unique_name_in_owner = true
+z_index = 10
 texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_korna")

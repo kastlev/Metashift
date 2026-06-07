@@ -255,8 +255,16 @@ unique_name_in_owner = true
 wait_time = 9.0
 
 [node name="ShakeCamera" type="Camera2D" parent="." unique_id=1603145003]
-anchor_mode = 0
+limit_left = 0
+limit_top = 0
+limit_right = 1152
+limit_bottom = 648
 script = ExtResource("11_lmnmg")
+follow_smooth = false
+follow_smoothing = 0.0
+lookahead_distance = 0.0
+lookahead_smoothing = 0.0
+zoom_smoothing = 0.0
 shake_type = 0
 shake_multiplier = 2.0
 metadata/_custom_type_script = "uid://bdefyhhaat5bj"

@@ -55,11 +55,42 @@ var _last_dir_timer := 0.0
 
 var _fire_cooldown_timer := 0.0
 
+var random = 0.0
+
+var _original_sprite_scale := Vector2.ONE
+var _original_sprite_z_index := 10
+var can_pulse := true
+var tween_move_pulse: Tween
+var last_axis := ""
+
 func _ready() -> void:
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
+	_original_sprite_scale = animated_sprite.scale
+	_original_sprite_z_index = animated_sprite.z_index
+
+#func _process(delta):
+	#queue_redraw()
+	#print("colision status: ", collision_shape_2d.disabled)
+
+#func _draw():
+	#for enemy in get_tree().get_nodes_in_group("enemy"):
+		#draw_line(
+			#Vector2.ZERO,
+			#to_local(enemy.global_position),
+			#Color.RED,
+			#2.0
+		#)
 
 func _physics_process(delta: float) -> void:
+	#for i in get_slide_collision_count():
+		#var collision = get_slide_collision(i)
+		#print(collision.get_collider().name)
+	#print(
+	#"dash=", is_dashing,
+	#" vel=", velocity,
+	#" input=", input_direction
+	#)
 	_read_input()
 	_tick_timers(delta)
 	
@@ -70,7 +101,63 @@ func _physics_process(delta: float) -> void:
 	_flip_sprite()
 	_update_blink()
 	
+
+	#if input_direction.length() > 0.1 and can_move_feel():
+		#play_move_feel()
+	#else:
+		#stop_move_feel()
 	move_and_slide()
+
+func can_move_feel() -> bool:
+	return !is_dashing and can_pulse
+
+func play_move_feel():
+	var movement_axis := get_movement_axis()
+
+	if movement_axis == last_axis and tween_move_pulse:
+		return
+
+	last_axis = movement_axis
+
+	if tween_move_pulse:
+		tween_move_pulse.kill()
+
+	var squash_factor: Vector2
+	var stretch_factor: Vector2
+
+	if movement_axis == "horizontal":
+		squash_factor = Vector2(0.9, 1.1)
+		stretch_factor = Vector2(1.1, 0.9)
+	else:
+		squash_factor = Vector2(1.1, 0.9)
+		stretch_factor = Vector2(0.9, 1.1)
+
+	var squash_scale := _original_sprite_scale * squash_factor
+	var stretch_scale := _original_sprite_scale * stretch_factor
+
+	tween_move_pulse = create_tween()
+
+	tween_move_pulse.tween_property(animated_sprite, "scale", squash_scale, 0.12)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN_OUT)
+
+	tween_move_pulse.tween_property(animated_sprite, "scale", stretch_scale, 0.12)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN_OUT)
+
+func stop_move_feel():
+	if tween_move_pulse:
+		tween_move_pulse.kill()
+		tween_move_pulse = null
+
+	var reset_tween = create_tween()
+	reset_tween.tween_property(animated_sprite, "scale", _original_sprite_scale, 0.15)
+
+func get_movement_axis() -> String:
+	if abs(input_direction.x) > abs(input_direction.y):
+		return "horizontal"
+	else:
+		return "vertical"
 
 ### PUBLIC FUNC
 func is_invulnerable() -> bool:
@@ -125,22 +212,65 @@ func _handle_dash():
 		return
 
 	if input_direction != Vector2.ZERO:
-		_dash_direction_started = _dash_direction_started.slerp(input_direction, 0.7)
+		var _current_input_influence_to_dash = 0.6
+		_dash_direction_started = _dash_direction_started.slerp(input_direction, _current_input_influence_to_dash)
 
 	velocity = _dash_direction_started * dash_speed
 	
-	collision_shape_2d.disabled = true
-	
-	_afterimage_counter += 1
-	if _afterimage_counter % 3 == 0:
-		_spawn_afterimage()
+	_update_property_while_dash()
 
-	scale = Vector2(0.5, 0.5)
 
 	if _dash_timer <= 0.0:
 		is_dashing = false
 		_dash_iframes_timer = POST_DASH_IFRAMES
-		
+		_update_property_end_dash()
+
+func _update_property_while_dash():
+	collision_shape_2d.disabled = true
+
+	_afterimage_counter += 1
+	if _afterimage_counter % 3 == 0:
+		_spawn_afterimage()
+
+	if random == 0.0:
+		random = randf()
+
+	var dir := input_direction if input_direction != Vector2.ZERO else _dash_direction_started
+	dir = dir.normalized()
+
+	var horizontal_stretch = Vector2(1.4, 0.7)
+	var vertical_stretch = Vector2(0.6, 1.4)
+	var dash_scale = horizontal_stretch if abs(dir.x) > abs(dir.y) else vertical_stretch
+	
+	var scale_plus = Vector2.ZERO
+	
+	if random <= 0.5:
+		scale_plus = Vector2(1.5, 1.5)
+		animated_sprite.z_index = _original_sprite_z_index
+	else:
+		scale_plus = Vector2(0, 0)
+		animated_sprite.z_index = 9
+	
+	var base_scale = _original_sprite_scale * dash_scale
+	var final_scale = base_scale + scale_plus
+	
+	animated_sprite.scale = final_scale
+	
+	var is_diagonal = abs(dir.x) > 0.3 and abs(dir.y) > 0.3
+	
+	if is_diagonal:
+		if dir.y < 0:
+			animated_sprite.skew = dir.x * 0.4
+		else:
+			animated_sprite.skew = dir.x * -0.4
+	
+func _update_property_end_dash():
+	collision_shape_2d.disabled = false
+	_afterimage_counter = 0
+	animated_sprite.scale = _original_sprite_scale
+	animated_sprite.skew = 0.0
+	random = 0.0
+
 func _handle_movement(delta):
 	if is_dashing:
 		return
@@ -149,10 +279,6 @@ func _handle_movement(delta):
 		velocity = velocity.move_toward(input_direction * speed, acceleration * delta)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-	
-	scale = Vector2.ONE
-	collision_shape_2d.disabled = false
-	_afterimage_counter = 0
 
 func _handle_fire():
 	if !is_shooting:
@@ -160,8 +286,26 @@ func _handle_fire():
 		
 	if _fire_cooldown_timer > 0.0:
 		return
+		
+	pulse()
 	_fire()
+	GameCameraService.add_trauma(0.3)
 	_fire_cooldown_timer = fire_cooldown
+
+func pulse():
+	if not can_pulse:
+		return
+
+	can_pulse = false
+
+	var tween = create_tween()
+
+	tween.tween_property(animated_sprite, "scale", Vector2(2.4, 2.4), 0.05)
+	tween.tween_property(animated_sprite, "scale", _original_sprite_scale, 0.1)
+
+	tween.finished.connect(func():
+		can_pulse = true
+	)
 
 func _fire() -> void:
 	if bullet_scene == null or is_dashing:
@@ -211,7 +355,7 @@ func _spawn_afterimage() -> void:
 	ghost.modulate = Color(1, 1, 1, 0.20)
 	get_tree().current_scene.add_child(ghost)
 	var tween := create_tween()
-	tween.tween_property(ghost, "modulate:a", 0.0, 0.10)
+	tween.tween_property(ghost, "modulate:a", 0.0, 0.12)
 	await tween.finished
 	ghost.queue_free()
 
