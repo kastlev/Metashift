@@ -59,6 +59,7 @@ var _noise: FastNoiseLite
 var _active_shake_type: ShakeType  # tipo activo en este momento
 
 func _ready() -> void:
+	process_callback = Camera2D.CAMERA2D_PROCESS_PHYSICS # with interpolation On
 	GameCameraService.register(self)
 	_noise = FastNoiseLite.new()
 	_noise.seed = randi()

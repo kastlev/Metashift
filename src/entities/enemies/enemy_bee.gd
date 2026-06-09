@@ -30,15 +30,6 @@ func update_behavior(delta: float) -> void:
 		direction = (player.global_position - global_position).normalized()
 
 	velocity = direction * speed
-	for i in get_slide_collision_count():
-		var c = get_slide_collision(i)
-
-		print(
-			"collider:",
-			c.get_collider().name,
-			" normal:",
-			c.get_normal()
-		)
 func on_died() -> void:
 	EnemyUtils.explotion(global_position, num_bullets, bullet_speed, bullet_range, bullet_scene, self)
 

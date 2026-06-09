@@ -13,7 +13,6 @@ config_version=5
 config/name="Metashift"
 run/main_scene="res://src/level.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
-run/max_fps=60
 config/icon="res://art/images/hud/lifes.png"
 
 [autoload]
@@ -42,6 +41,7 @@ player=""
 shoot=""
 shoot_enemy=""
 wall=""
+shockwave=""
 
 [input]
 

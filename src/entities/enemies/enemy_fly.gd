@@ -31,15 +31,6 @@ func update_behavior(delta: float) -> void:
 			current_state = STATE.BOUNCING
 		STATE.BOUNCING:
 			_rebound_around(delta)
-	for i in get_slide_collision_count():
-		var c = get_slide_collision(i)
-
-		print(
-			"collider:",
-			c.get_collider().name,
-			" normal:",
-			c.get_normal()
-		)
 
 func _charge_towards_player() -> void:
 	# Se llama UNA vez al entrar en CHARGING, setea velocidad y ya no recalcula
