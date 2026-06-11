@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dfm76vdop74nd"]
+
+[ext_resource type="Script" uid="uid://cffguapx2qhi0" path="res://src/gameplay/entities/bullet.gd" id="1_frctk"]
+[ext_resource type="Texture2D" uid="uid://d1lqxbm4357rd" path="res://assets/art/characters/enemys/bullet_enemy.png" id="2_e4wwb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x4jhy"]
+radius = 8.0
+
+[node name="BulletEnemy" type="Area2D" unique_id=647204820]
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_frctk")
+
+[node name="BulletSprite" type="Sprite2D" parent="." unique_id=223122217]
+scale = Vector2(3.5, 3.5)
+texture = ExtResource("2_e4wwb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1678576749]
+shape = SubResource("CircleShape2D_x4jhy")
+
+[node name="VisibleOnScreen" type="VisibleOnScreenNotifier2D" parent="." unique_id=1515640928]

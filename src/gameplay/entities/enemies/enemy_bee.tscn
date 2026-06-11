@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://ctpv2pyhumre7"]
+
+[ext_resource type="Script" uid="uid://ccdkidrb82ps2" path="res://src/gameplay/entities/enemies/enemy_bee.gd" id="1_gku7h"]
+[ext_resource type="PackedScene" uid="uid://dfm76vdop74nd" path="res://src/gameplay/entities/enemies/base/bullet_enemy.tscn" id="2_nj3f7"]
+[ext_resource type="Shader" uid="uid://dl1ta6qtnkpi7" path="res://src/shaders/effects/vfx/damage_flash_shake.gdshader" id="3_k42fe"]
+[ext_resource type="Texture2D" uid="uid://dima6spmq81gg" path="res://assets/art/characters/enemys/death_animation_final_3-Sheet.png" id="3_mbves"]
+[ext_resource type="Texture2D" uid="uid://c8hvpx4d27xwg" path="res://assets/art/characters/enemys/enemy_02-Sheet.png" id="4_k42fe"]
+[ext_resource type="Script" uid="uid://1gysj4qvljlo" path="res://src/components/health_component.gd" id="5_muad4"]
+[ext_resource type="Script" uid="uid://dpchwl51pc0ui" path="res://src/components/health_data.gd" id="6_tlhoh"]
+[ext_resource type="Script" uid="uid://dlgfycrugjthu" path="res://src/components/hurtbox_component.gd" id="8_7njhs"]
+[ext_resource type="Script" uid="uid://c0cbgx52630x1" path="res://src/components/detection_component.gd" id="9_wnjs7"]
+[ext_resource type="Script" uid="uid://donfc4y1yc4fy" path="res://src/components/hitbox_component.gd" id="10_nj3f7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_muad4"]
+shader = ExtResource("3_k42fe")
+shader_parameter/get_hit = false
+shader_parameter/shake_intensity = 10.0
+shader_parameter/shake_strength = 0.0
+shader_parameter/shake_speed = 30.0
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_strength = 0.0
+shader_parameter/flash_speed = 30.0
+shader_parameter/flash_solid = true
+shader_parameter/render_noise = false
+shader_parameter/amplitude = 0.0
+shader_parameter/time_scale = 0.04
+shader_parameter/noise_scale = 0.001
+shader_parameter/rotation_strength = 1.0
+shader_parameter/rotation_pivot = Vector2(0.5, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57t6x"]
+atlas = ExtResource("3_mbves")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tca5x"]
+atlas = ExtResource("3_mbves")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufgqb"]
+atlas = ExtResource("4_k42fe")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3wfi"]
+atlas = ExtResource("4_k42fe")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yehfe"]
+atlas = ExtResource("4_k42fe")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jql5w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_57t6x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tca5x")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ufgqb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x3wfi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yehfe")
+}],
+"loop": true,
+"name": &"default",
+"speed": 6.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5trun"]
+size = Vector2(29.5, 34)
+
+[sub_resource type="Resource" id="Resource_aelts"]
+script = ExtResource("6_tlhoh")
+metadata/_custom_type_script = "uid://dpchwl51pc0ui"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mbves"]
+radius = 45.099888
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_efgd4"]
+radius = 186.011
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nj3f7"]
+radius = 22.0
+
+[node name="EnemyBee" type="CharacterBody2D" unique_id=736086891 groups=["enemy"]]
+motion_mode = 1
+safe_margin = 20.0
+script = ExtResource("1_gku7h")
+bullet_scene = ExtResource("2_nj3f7")
+speed = 300.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1509156723]
+unique_name_in_owner = true
+z_index = 10
+texture_filter = 1
+texture_repeat = 2
+material = SubResource("ShaderMaterial_muad4")
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_jql5w")
+autoplay = "default"
+frame_progress = 0.511556
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=221123916]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_5trun")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=343799761]
+unique_name_in_owner = true
+script = ExtResource("5_muad4")
+data = SubResource("Resource_aelts")
+metadata/_custom_type_script = "uid://1gysj4qvljlo"
+
+[node name="HurtboxComponent" type="Area2D" parent="." unique_id=1541753655 node_paths=PackedStringArray("health_component") groups=["enemy"]]
+unique_name_in_owner = true
+script = ExtResource("8_7njhs")
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=2073648034]
+shape = SubResource("CircleShape2D_mbves")
+
+[node name="DetectionComponent" type="Area2D" parent="." unique_id=1139603888]
+unique_name_in_owner = true
+script = ExtResource("9_wnjs7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent" unique_id=1677547977]
+shape = SubResource("CircleShape2D_efgd4")
+
+[node name="HitboxComponent" type="Area2D" parent="." unique_id=492979474]
+script = ExtResource("10_nj3f7")
+metadata/_custom_type_script = "uid://donfc4y1yc4fy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=944018314]
+shape = SubResource("CircleShape2D_nj3f7")

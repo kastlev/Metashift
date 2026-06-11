@@ -11,25 +11,26 @@ config_version=5
 [application]
 
 config/name="Metashift"
-run/main_scene="res://src/level.tscn"
+run/main_scene="res://src/core/main/main.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
-config/icon="res://art/images/hud/lifes.png"
+config/icon="res://assets/art/ui/hud/lifes.png"
 
 [autoload]
 
-GLOBAL="*res://src/autoloads/global.gd"
+GLOBAL="*res://src/core/autoload/global.gd"
 SceneLoader="*uid://bwlniyy5k4qh4"
 GameCameraService="*uid://bnbcbopagnabk"
 
 [display]
 
+window/size/mode=4
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image_hotspot=Vector2(-10, -10)
 
 [file_customization]
 
 folder_colors={
-"res://art/": "red",
+"res://assets/": "red",
 "res://src/": "purple"
 }
 
