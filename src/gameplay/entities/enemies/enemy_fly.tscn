@@ -84,7 +84,7 @@ script = ExtResource("6_nee33")
 metadata/_custom_type_script = "uid://dpchwl51pc0ui"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mioob"]
-radius = 28.00806
+radius = 30.007523
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_efgd4"]
 radius = 186.011
@@ -119,6 +119,7 @@ metadata/_custom_type_script = "uid://1gysj4qvljlo"
 
 [node name="HurtboxComponent" type="Area2D" parent="." unique_id=522267467 node_paths=PackedStringArray("health_component") groups=["enemy"]]
 unique_name_in_owner = true
+visible = false
 script = ExtResource("8_fsub5")
 health_component = NodePath("../HealthComponent")
 
@@ -128,6 +129,7 @@ shape = SubResource("CircleShape2D_mioob")
 
 [node name="DetectionComponent" type="Area2D" parent="." unique_id=2141554077]
 unique_name_in_owner = true
+visible = false
 script = ExtResource("9_uvl3y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent" unique_id=288859384]

@@ -1,11 +1,9 @@
 extends Node
 
-
 @export var enemy_scenes: Array[PackedScene]
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 @onready var start_position_player: Marker2D = %StartPositionPlayer
-@onready var lifes: Label = %Lifes
 @onready var text_tutorial: Label = %TextTutorial
 @onready var reticle: Sprite2D = %Reticle
 @onready var path_spawn_enemy: PathFollow2D = %PathFollowSpawnEnemy
@@ -31,9 +29,7 @@ func _ready() -> void:
 	print("READY START")
 
 	var t := Time.get_ticks_usec()
-	player.health.damaged.connect(_on_health_player_change)
 	player.health.died.connect(_on_player_died)
-	_on_health_player_change()
 	player.position = start_position_player.position
 	text_tutorial.visible = false
 	text_tutorial.modulate.a = 0.0
@@ -48,22 +44,23 @@ func _ready() -> void:
 	
 	
 func _play_intro_transition() -> void:
-	var mat = transition_rect.material
-
-	mat.set_shader_parameter("circle_size", 0.0)
-
-	var tween := create_tween()
-
-	tween.tween_method(
-		func(v):
-			mat.set_shader_parameter("circle_size", v),
-		0.0,
-		1.0,
-		1.0
-	)
-
-	await tween.finished
-	transition_rect.visible = false
+	pass
+	#var mat = transition_rect.material
+#
+	#mat.set_shader_parameter("circle_size", 0.0)
+#
+	#var tween := create_tween()
+#
+	#tween.tween_method(
+		#func(v):
+			#mat.set_shader_parameter("circle_size", v),
+		#0.0,
+		#1.0,
+		#1.0
+	#)
+#
+	#await tween.finished
+	#transition_rect.visible = false
 
 func _play_outro_transition() -> void:
 	transition_rect.visible = true
@@ -107,13 +104,9 @@ func _start_blink() -> Tween:
 	return tween
 
 
-func _on_health_player_change(_dir: Vector2 = Vector2.ZERO) -> void:
-	lifes.text = str(player.health.current_health as int)
-
-
 func _on_player_died() -> void:
 	GLOBAL.previous_scene_path = get_tree().current_scene.scene_file_path
-	get_tree().call_deferred("change_scene_to_file", "res://src/ui/game_over.tscn") 
+	get_tree().call_deferred("change_scene_to_file", "res://src/screens/game_over.tscn") 
 
 func _on_spawn_enemy_timeout() -> void:
 	if amount_enemy >= MAX_ENEMY:

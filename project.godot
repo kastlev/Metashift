@@ -11,8 +11,10 @@ config_version=5
 [application]
 
 config/name="Metashift"
-run/main_scene="res://src/core/main/main.tscn"
+config/tags=PackedStringArray("2d", "best_practices", "shaders")
+run/main_scene="res://src/core/main/world.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
+run/max_fps=90
 config/icon="res://assets/art/ui/hud/lifes.png"
 
 [autoload]
@@ -31,6 +33,7 @@ mouse_cursor/custom_image_hotspot=Vector2(-10, -10)
 
 folder_colors={
 "res://assets/": "red",
+"res://shader_vault/": "orange",
 "res://src/": "purple"
 }
 

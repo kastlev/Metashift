@@ -13,6 +13,8 @@ extends Enemy
 func fire_to_player() -> void:
 	if not is_instance_valid(player):
 		return
+	if is_dead:
+		return
 	EnemyUtils.fire_to_player(global_position, player, bullet_scene, bullet_speed, get_tree().current_scene)
 
 

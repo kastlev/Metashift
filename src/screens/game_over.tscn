@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxnih2xtkjk4y"]
 
-[ext_resource type="Script" uid="uid://fc76p1rvs200" path="res://src/ui/game_over.gd" id="1_gi1vw"]
+[ext_resource type="Script" uid="uid://fc76p1rvs200" path="res://src/screens/game_over.gd" id="1_gi1vw"]
 [ext_resource type="Texture2D" uid="uid://dp378kumne67j" path="res://assets/art/characters/player/player_sheet_idle.png" id="2_mg20t"]
 [ext_resource type="FontFile" uid="uid://bsanmgeyeko30" path="res://assets/art/ui/fonts/Jersey10-Regular.ttf" id="3_h1mia"]
 

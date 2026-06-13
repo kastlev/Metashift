@@ -27,6 +27,12 @@ const POST_DASH_IFRAMES := 0.12
 @export var dash_duration: float = 0.1
 @export var dash_cooldown: float = 0.5
 
+@export_group("Knockback on Hurt")
+## Radio en el que se empujan los enemigos cuando el player recibe daño
+@export var hurt_push_radius: float = 300.0
+## Fuerza del empujón
+@export var hurt_push_force: float = 800.0
+
 ## ONREADY
 @onready var animated_sprite: AnimatedSprite2D = $Body/AnimatedSprite2D
 @onready var bullet_spawn: Marker2D = $BulletSpawn
@@ -172,7 +178,7 @@ func _start_dash() -> void:
 	_dash_timer = dash_duration
 	_dash_cooldown_timer = dash_cooldown
 	_do_dash_freeze()
-	sfx_dash.play()
+	Utils.play_sfx_random(sfx_fire)
 	_dash_position_started = global_position
 	await get_tree().create_timer(0.2).timeout
 	get_tree().call_group("shockwave", "play", _dash_position_started)
@@ -323,7 +329,7 @@ func _fire() -> void:
 	bullet.global_position = bullet_spawn.global_position
 	bullet.velocity_vec = (get_global_mouse_position() - global_position).normalized() * bullet_speed
 	get_tree().current_scene.add_child(bullet)
-	sfx_fire.play()
+	Utils.play_sfx_random(sfx_fire)
 
 func _flip_sprite() -> void:
 	if input_direction.x == 0:
@@ -348,8 +354,10 @@ func _update_blink() -> void:
 
 	if health.iframe_timer > 0.0:
 		animated_sprite.visible = int(health.iframe_timer * 10.0) % 2 == 0
+		collision_shape_2d.disabled = true
 	else:
 		animated_sprite.visible = true
+		collision_shape_2d.disabled = false
 
 func _spawn_afterimage() -> void:
 	var ghost := AnimatedSprite2D.new()
@@ -387,9 +395,9 @@ func _dash():
 		_dash_buffer_timer = DASH_BUFFER_WINDOW
 ### SIGNALS
 func _on_damaged(_dir: Vector2 = Vector2.ZERO) -> void:
-	sfx_hurt.play()
+	Utils.play_sfx_random(sfx_fire)
 	animated_sprite.visible = true
-
+	Utils.push_enemies_from_point(get_tree(), global_position, hurt_push_radius, hurt_push_force)
 	if _hitstop_active:
 		return
 

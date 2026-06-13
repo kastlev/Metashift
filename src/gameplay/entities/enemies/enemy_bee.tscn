@@ -122,6 +122,7 @@ metadata/_custom_type_script = "uid://1gysj4qvljlo"
 
 [node name="HurtboxComponent" type="Area2D" parent="." unique_id=1541753655 node_paths=PackedStringArray("health_component") groups=["enemy"]]
 unique_name_in_owner = true
+visible = false
 script = ExtResource("8_7njhs")
 health_component = NodePath("../HealthComponent")
 
@@ -130,6 +131,7 @@ shape = SubResource("CircleShape2D_mbves")
 
 [node name="DetectionComponent" type="Area2D" parent="." unique_id=1139603888]
 unique_name_in_owner = true
+visible = false
 script = ExtResource("9_wnjs7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent" unique_id=1677547977]

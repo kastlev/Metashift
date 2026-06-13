@@ -36,3 +36,39 @@ static func create_timer(source: Node, duration: float, callback: Callable, igno
 	source.add_child(timer)
 	timer.timeout.connect(callback)
 	return timer
+
+static func play_sfx_random(
+	audio: AudioStreamPlayer2D,
+	pitch_base := 1.0,
+	pitch_variation := 0.05,
+	volume_min := -2.0,
+	volume_max := 0.0,
+	clips: Array[AudioStream] = []
+) -> void:
+	if clips.size() > 0:
+		audio.stream = clips.pick_random()
+
+	audio.pitch_scale = pitch_base + randf_range(-pitch_variation, pitch_variation)
+	audio.volume_db = randf_range(volume_min, volume_max)
+	audio.play()
+
+static func push_enemies_from_point(scene_tree: SceneTree, origin: Vector2, radius: float, force: float) -> void:
+	for node in scene_tree.get_nodes_in_group("enemy"):
+		if not is_instance_valid(node):
+			continue
+		if not (node  is Enemy):
+			continue
+		var enemy := node as Enemy
+		if enemy.is_dead:
+			return
+		print(enemy, enemy is Enemy) 
+		var offset = enemy.global_position - origin
+		var dist = offset.length()
+		if dist > radius:
+			continue
+
+		var direction = offset.normalized() if dist > 0.001 else Vector2.from_angle(randf() * TAU)
+		var falloff = 1.0 - (dist / radius)
+		print(direction * force * falloff)
+		enemy.apply_knockback(direction * force * falloff)
+		print("fuerza aplicada")

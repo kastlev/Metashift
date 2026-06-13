@@ -43,5 +43,6 @@ func _on_button_pressed() -> void:
 	print(
 	get_tree().get_nodes_in_group("enemy").size()
 	)
-	get_tree().change_scene_to_file(GLOBAL.previous_scene_path)
+	#get_tree().change_scene_to_file(GLOBAL.previous_scene_path)
+	SceneLoader.load_scene(GLOBAL.previous_scene_path)
 	print("change scene:", Time.get_ticks_usec() - start)

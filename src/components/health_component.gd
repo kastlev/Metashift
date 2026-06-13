@@ -2,6 +2,7 @@ class_name HealthComponent
 extends Node
 
 signal health_changed(current: float, max_health: float)
+signal max_health_changed(max_health: float)
 signal damaged(direction: Vector2)
 signal died
 
@@ -13,11 +14,7 @@ var iframe_timer := 0.0
 func _ready() -> void:
 	assert(data != null, name + "/HealthComponent: HealthData requerido")
 	current_health = data.max_health
-
-func initialize(override_max: float) -> void:
-	# Permite que EnemyData o PlayerData sobreescriban el max sin tocar el Resource.
-	# Si no se llama, usa data.max_health del inspector.
-	current_health = override_max
+	health_changed.emit(current_health, data.max_health)
 
 func _physics_process(delta: float) -> void:
 	if iframe_timer > 0:
@@ -46,3 +43,10 @@ func is_dead() -> bool:
 
 func emit_health_changed():
 	health_changed.emit(current_health, data.max_health)
+
+func max_health_update(value: int):
+	data.max_health = value
+	current_health = clamp(current_health, 0.0, data.max_health)
+	max_health_changed.emit(value)
+	health_changed.emit(current_health, data.max_health)
+	

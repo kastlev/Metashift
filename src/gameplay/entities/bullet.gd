@@ -14,7 +14,7 @@ var start_position: Vector2
 
 func _ready() -> void:
 	start_position = global_position
-	visible_on_screen.screen_exited.connect(queue_free)
+	visible_on_screen.screen_exited.connect(_on_screen_exited)
 	area_entered.connect(_on_area_entered)
 
 func _physics_process(delta: float) -> void:
@@ -30,3 +30,7 @@ func _on_area_entered(area: Area2D) -> void:
 				return
 		area.take_damage(damage)
 		queue_free()
+
+func _on_screen_exited():
+	print(name)
+	queue_free()

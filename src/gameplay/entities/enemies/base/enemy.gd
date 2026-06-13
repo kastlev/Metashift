@@ -8,6 +8,10 @@ extends CharacterBody2D
 ## Daño al tocar al jugador
 @export var touch_damage: int = 1
 
+@export_group("Knockback")
+## Qué tan rápido se frena el knockback recibido
+@export var knockback_friction: float = 900.0
+
 @onready var animated_sprite: AnimatedSprite2D = %AnimatedSprite2D
 @onready var health: HealthComponent = %HealthComponent
 @onready var hurtbox: HurtboxComponent = %HurtboxComponent
@@ -21,7 +25,12 @@ var death_velocity: Vector2
 var death_rotation_speed: float
 
 var timer_flash: Timer
+var timer_destroy: Timer
+
 var flash_duration: float = 0.2
+var destroy_duration: float = 3
+
+var _knockback_velocity := Vector2.ZERO
 
 enum STATE {
 	IDLE,        # sin hacer nada, esperando
@@ -38,12 +47,16 @@ func _ready() -> void:
 	health.died.connect(_on_health_died)
 	animated_sprite.material = animated_sprite.material.duplicate()
 	timer_flash = Utils.create_timer(self, flash_duration, _on_timer_flash_timeout)
+	timer_destroy = Utils.create_timer(self, destroy_duration, _on_timer_destroy_timeout)
 	_init_flash_shader_property()
 
 func _physics_process(delta: float) -> void:
+	if _knockback_velocity.length() > 1.0:
+		global_position += _knockback_velocity * delta
+		_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, knockback_friction * delta)
+	
 	if is_dead:
 		death_velocity.y += 1300 * delta
-		
 		global_position += death_velocity * delta
 		rotation += death_rotation_speed * delta
 		animated_sprite.modulate = Color(1, 1, 1, 0.4)
@@ -57,11 +70,24 @@ func _physics_process(delta: float) -> void:
 func _use_manual_movement() -> bool:
 	return false
 
+## Aplica un impulso externo (knockback) a este enemigo
+func apply_knockback(force: Vector2) -> void:
+	_knockback_velocity += force
+	
 func _flip_sprite() -> void:
-	if velocity.x > 0:
+	if velocity.x > 5.0:
 		animated_sprite.flip_h = false
-	elif velocity.x < 0:
+	elif velocity.x < -5.0:
 		animated_sprite.flip_h = true
+
+#func _flip_sprite() -> void:
+	#if not is_instance_valid(player):
+		#return
+	#var dx := player.global_position.x - global_position.x
+	#if dx > 4.0:
+		#animated_sprite.flip_h = false
+	#elif dx < -4.0:
+		#animated_sprite.flip_h = true
 
 
 @abstract
@@ -82,7 +108,7 @@ func _on_health_died() -> void:
 	
 func _die() -> void:
 	is_dead = true
-
+	timer_destroy.start()
 	death_velocity = velocity
 	death_velocity.y = -150
 
@@ -119,3 +145,7 @@ func flash() -> void:
 
 func _on_timer_flash_timeout() -> void:
 	animated_sprite.material.set_shader_parameter("get_hit", false)
+	
+func _on_timer_destroy_timeout():
+	print("enemy destroy")
+	queue_free()

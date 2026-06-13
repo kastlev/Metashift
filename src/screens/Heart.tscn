@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://btf64fgpyh2xo"]
+
+[ext_resource type="Texture2D" uid="uid://ck2v53j7w4phg" path="res://assets/art/ui/hud/lifes.png" id="1_1btxo"]
+[ext_resource type="Script" uid="uid://cbrwejd68fw4f" path="res://src/screens/heart.gd" id="2_gi6xi"]
+
+[node name="Heart" type="TextureRect" unique_id=180087721]
+custom_minimum_size = Vector2(44, 44)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("2_gi6xi")
+full_texture = ExtResource("1_1btxo")

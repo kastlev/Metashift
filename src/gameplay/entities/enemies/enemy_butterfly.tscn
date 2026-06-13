@@ -122,18 +122,18 @@ metadata/_custom_type_script = "uid://1gysj4qvljlo"
 
 [node name="HurtboxComponent" type="Area2D" parent="." unique_id=914836320 groups=["enemy"]]
 unique_name_in_owner = true
+visible = false
 script = ExtResource("8_wjsvg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=964980430]
-visible = false
 shape = SubResource("CircleShape2D_ls6xm")
 
 [node name="DetectionComponent" type="Area2D" parent="." unique_id=1773182545]
 unique_name_in_owner = true
+visible = false
 script = ExtResource("9_uq1fr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent" unique_id=1360361506]
-visible = false
 shape = SubResource("CircleShape2D_efgd4")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=582170359]
@@ -141,5 +141,4 @@ script = ExtResource("10_pecx0")
 metadata/_custom_type_script = "uid://donfc4y1yc4fy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1198679414]
-visible = false
 shape = SubResource("CircleShape2D_go6gt")

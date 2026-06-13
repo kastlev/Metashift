@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dh3e24yfjtncf" path="res://src/gameplay/entities/player/player.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dp378kumne67j" path="res://assets/art/characters/player/player_sheet_idle.png" id="2"]
 [ext_resource type="PackedScene" uid="uid://cglthaenley2t" path="res://src/gameplay/entities/player/bullet_player.tscn" id="2_0mfjg"]
-[ext_resource type="Shader" uid="uid://d4gnm88je3w26" path="res://src/shaders/Wobble_and_shadow.gdshader" id="3_tk761"]
+[ext_resource type="Shader" uid="uid://d4gnm88je3w26" path="res://src/shaders/effects/sprite/Wobble_and_shadow.gdshader" id="3_tk761"]
 [ext_resource type="AudioStream" uid="uid://c11u8bjxas72p" path="res://assets/audio/sfx/hurt/hurt1.wav" id="4"]
 [ext_resource type="Script" uid="uid://1gysj4qvljlo" path="res://src/components/health_component.gd" id="4_eb65w"]
 [ext_resource type="AudioStream" uid="uid://bs4wir50si5vo" path="res://assets/audio/sfx/dash/original_dash.wav" id="5"]
@@ -53,7 +53,7 @@ animations = [{
 
 [sub_resource type="Resource" id="Resource_tk761"]
 script = ExtResource("5_4f0qm")
-max_health = 7.0
+max_health = 6.0
 has_iframes = true
 iframe_duration = 1.0
 metadata/_custom_type_script = "uid://dpchwl51pc0ui"

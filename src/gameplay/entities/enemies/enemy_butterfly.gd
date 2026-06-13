@@ -4,7 +4,8 @@ extends EnemyShooter
 
 @export_group("Characteristics")
 @export var must_explotion: bool = true
-@export var follow_distance: float = 200.0  # original: 200.0
+@export var chase_range: float = 180.0   # si está más cerca que esto -> CHASE
+@export var wander_range: float = 240.0  # si está más lejos que esto -> WANDER
 
 @export_group("Shoot")
 @export var fire_rate_min: float = 1.0
@@ -38,27 +39,37 @@ func update_behavior(delta: float) -> void:
 		STATE.CHASE:
 			_move_towards_player(delta)
 		STATE.WANDER:
-			_move_towards__wander_target_offset(delta)
+			_move_towards_wander_target_offset(delta)
 
 func _move_towards_player(_delta: float) -> void:
 	if not is_instance_valid(player):
 		return
 	var dist := global_position.distance_to(player.global_position)
-	
-	if dist > follow_distance and not _is_wandering:
+
+	if dist > wander_range and not _is_wandering:
 		_is_wandering = true
 		_wander_target_offset = EnemyUtils.calc_wander_target_offset()
-		follow_distance = randi_range(190, 220)
 		current_state = STATE.WANDER
 		return
-	velocity = (player.global_position - global_position).normalized() * speed
 
-func _move_towards__wander_target_offset(_delta: float) -> void:
+	velocity = (player.global_position - global_position).normalized() * speed
+	
+func _flip_sprite() -> void:
+	if not is_instance_valid(player):
+		return
+	var dx := player.global_position.x - global_position.x
+	if dx > 4.0:
+		animated_sprite.flip_h = false
+	elif dx < -4.0:
+		animated_sprite.flip_h = true
+
+func _move_towards_wander_target_offset(_delta: float) -> void:
 	if not is_instance_valid(player):
 		return
 	var random_target = player.global_position + _wander_target_offset
 	velocity = (random_target - global_position).normalized() * speed
-	if global_position.distance_to(player.global_position) < follow_distance:
+
+	if global_position.distance_to(player.global_position) < chase_range:
 		current_state = STATE.CHASE
 		_is_wandering = false
 

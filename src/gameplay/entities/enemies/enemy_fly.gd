@@ -52,7 +52,7 @@ func _rebound_around(delta: float) -> void:
 		if scale <= Vector2(2.2, 2.2):
 			scale += Vector2(0.1, 0.1)
 		if scale >= Vector2(1.3, 1.3):
-			GameCameraService.add_trauma(0.5)
+			GameCameraService.add_trauma(0.4)
 		current_state = STATE.CHARGING
 		
 

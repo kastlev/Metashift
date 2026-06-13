@@ -18,3 +18,6 @@ mono_crash.*.json
 # OS-specific ignores
 .DS_Store
 Thumbs.db
+
+# Shaders
+/shader_vault/
