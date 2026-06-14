@@ -79,7 +79,7 @@ This repository serves both as the game's source code and as a portfolio project
 
 You can play the jam version on itch.io:
 
-**[Play MetaShift]((https://kylent.itch.io/metashift))**
+**[Play MetaShift](https://kylent.itch.io/metashift)**
 
 ---
 
