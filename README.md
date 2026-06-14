@@ -26,11 +26,19 @@ You play as a freshly transformed insect trapped in a dark and hostile forest. S
 
 ## Screenshots
 
-<!-- GIFs and screenshots -->
+<!-- Add GIFs and screenshots here -->
 
 ## Development
 
-Developed in 9 days for Godot Wild Jam #77.
+MetaShift was originally developed in **9 days** for **Godot Wild Jam #77**.
+
+After the jam, the project continued as a personal learning and portfolio project, receiving several improvements including:
+
+- Visual polish and game feel improvements
+- Architecture and codebase refinements
+- Enemy behavior improvements
+- Additional shaders and visual effects
+- Bug fixes and optimization
 
 As the sole developer, I was responsible for:
 
@@ -51,11 +59,9 @@ As the sole developer, I was responsible for:
 
 ## Play the Game
 
-You can play the jam version on itch.io:
+You can play the original jam version on itch.io:
 
-**[Play MetaShift](https://kylent.itch.io/metashift)**
-
----
+**https://kylent.itch.io/metashift**
 
 ## License
 
