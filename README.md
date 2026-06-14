@@ -1,5 +1,3 @@
-<img width="315" height="250" alt="portada" src="https://github.com/user-attachments/assets/0b729ed7-2280-4cf4-a2a7-07325f6f7b14" />
-
 # MetaShift
 
 MetaShift is a top-down survival game developed in Godot for **Godot Wild Jam #77**, inspired by the theme **"Metamorphosis"**.
@@ -29,6 +27,7 @@ You play as a freshly transformed insect trapped in a dark and hostile forest. S
 ## Screenshots
 
 <!-- Add GIFs and screenshots here -->
+<img width="415" height="100" alt="Logo_jam_3" src="https://github.com/user-attachments/assets/ee6e62c1-69ec-48b8-aaaf-8523502b66e6" />
 <img width="1920" height="1080" alt="Captura de pantalla 2026-06-14 115539" src="https://github.com/user-attachments/assets/e9d80466-e9da-4f72-b03a-478b87a43470" />
 
 
