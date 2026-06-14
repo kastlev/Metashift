@@ -26,10 +26,17 @@ You play as a freshly transformed insect trapped in a dark and hostile forest. S
 
 ## Screenshots
 
-<!-- Add GIFs and screenshots here -->
-<img width="415" height="100" alt="Logo_jam_3" src="https://github.com/user-attachments/assets/ee6e62c1-69ec-48b8-aaaf-8523502b66e6" />
-<img width="1920" height="1080" alt="Captura de pantalla 2026-06-14 115539" src="https://github.com/user-attachments/assets/e9d80466-e9da-4f72-b03a-478b87a43470" />
+<p align="center">
+  <img width="415" alt="MetaShift Logo" src="https://github.com/user-attachments/assets/ee6e62c1-69ec-48b8-aaaf-8523502b66e6">
+</p>
 
+<p align="center">
+  <strong>Top-down survival game developed in Godot for Godot Wild Jam #77</strong>
+</p>
+
+<p align="center">
+  <img width="1000" alt="Gameplay Screenshot" src="https://github.com/user-attachments/assets/e9d80466-e9da-4f72-b03a-478b87a43470">
+</p>
 
 
 ## Development
