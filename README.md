@@ -1,5 +1,3 @@
-# MetaShift
-
 <p align="center">
   <img width="415" alt="MetaShift Logo" src="https://github.com/user-attachments/assets/ee6e62c1-69ec-48b8-aaaf-8523502b66e6">
 </p>
