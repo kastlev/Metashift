@@ -32,7 +32,7 @@ You play as a freshly transformed insect trapped in a dark and hostile forest. S
 
 MetaShift was originally developed in **9 days** for **Godot Wild Jam #77**.
 
-After the jam, the project continued as a personal learning and portfolio project, receiving several improvements including:
+After the jam, development continued with additional polish, gameplay refinements, architectural improvements, and technical enhancements.
 
 - Visual polish and game feel improvements
 - Architecture and codebase refinements
