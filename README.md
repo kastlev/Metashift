@@ -4,22 +4,6 @@ MetaShift is a top-down survival game developed in Godot for **Godot Wild Jam #7
 
 You play as a freshly transformed insect trapped in a dark and hostile forest. Survive increasingly dangerous waves of enemies, dodge attacks, and fight your way through the swarm.
 
----
-
-## Screenshots
-
-<!-- Add screenshots or GIFs here -->
-
-<p align="center">
-  <img src="images/screenshot_01.png" width="700">
-</p>
-
-<p align="center">
-  <img src="images/screenshot_02.png" width="700">
-</p>
-
----
-
 ## Features
 
 - Fast-paced top-down combat
@@ -29,8 +13,6 @@ You play as a freshly transformed insect trapped in a dark and hostile forest. S
 - Pixel-art visuals and shaders
 - Atmospheric visual effects
 - Progressive difficulty scaling
-
----
 
 ## Technical Highlights
 
@@ -42,11 +24,13 @@ You play as a freshly transformed insect trapped in a dark and hostile forest. S
 - Custom shaders and screen effects
 - Modular gameplay architecture
 
----
+## Screenshots
+
+<!-- GIFs and screenshots -->
 
 ## Development
 
-This project was developed in **9 days** as a game jam entry.
+Developed in 9 days for Godot Wild Jam #77.
 
 As the sole developer, I was responsible for:
 
@@ -59,21 +43,11 @@ As the sole developer, I was responsible for:
 - Audio integration
 - Game balancing and polish
 
----
-
 ## Technologies
 
 - Godot Engine
 - GDScript
 - GDShader
-
----
-
-## Repository Purpose
-
-This repository serves both as the game's source code and as a portfolio project showcasing gameplay programming, AI systems, game architecture, visual effects, and Godot development practices.
-
----
 
 ## Play the Game
 
