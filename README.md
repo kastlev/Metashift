@@ -65,7 +65,7 @@ As the sole developer, I was responsible for:
 
 You can play the original jam version on itch.io:
 
-**https://kylent.itch.io/metashift**
+**https://kastlev.itch.io/metashift**
 
 ## License
 
