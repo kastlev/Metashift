@@ -31,7 +31,8 @@ func update_behavior(delta: float) -> void:
 
 	velocity = direction * speed
 func on_died() -> void:
-	EnemyUtils.explotion(global_position, num_bullets, bullet_speed, bullet_range, bullet_scene, self)
+	pass
+	#EnemyUtils.explotion(global_position, num_bullets, bullet_speed, bullet_range, bullet_scene, self)
 
 func _on_detection_target_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

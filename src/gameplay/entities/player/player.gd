@@ -178,7 +178,7 @@ func _start_dash() -> void:
 	_dash_timer = dash_duration
 	_dash_cooldown_timer = dash_cooldown
 	_do_dash_freeze()
-	Utils.play_sfx_random(sfx_fire)
+	Utils.play_sfx_random(sfx_dash)
 	_dash_position_started = global_position
 	await get_tree().create_timer(0.2).timeout
 	get_tree().call_group("shockwave", "play", _dash_position_started)
@@ -385,7 +385,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		_dash()
 	
-	if event.is_action_pressed("ui_accept"):
+	if event.is_action_pressed("dash"):
 		_dash()
 
 func _dash():
@@ -395,7 +395,7 @@ func _dash():
 		_dash_buffer_timer = DASH_BUFFER_WINDOW
 ### SIGNALS
 func _on_damaged(_dir: Vector2 = Vector2.ZERO) -> void:
-	Utils.play_sfx_random(sfx_fire)
+	Utils.play_sfx_random(sfx_hurt)
 	animated_sprite.visible = true
 	Utils.push_enemies_from_point(get_tree(), global_position, hurt_push_radius, hurt_push_force)
 	if _hitstop_active:

@@ -16,7 +16,6 @@ func _ready() -> void:
 	# inicializar
 	_build_hearts(player.health.data.max_health)
 	_update_hearts(player.health.current_health)
-	print(player.health.health_changed.get_connections())
 	
 func _build_hearts(max_health: int) -> void:
 	print("BUILD HEARTS CALLED:", max_health, "ID:", get_instance_id())

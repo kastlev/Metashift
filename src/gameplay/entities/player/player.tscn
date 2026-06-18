@@ -3,13 +3,13 @@
 [ext_resource type="Script" uid="uid://dh3e24yfjtncf" path="res://src/gameplay/entities/player/player.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dp378kumne67j" path="res://assets/art/characters/player/player_sheet_idle.png" id="2"]
 [ext_resource type="PackedScene" uid="uid://cglthaenley2t" path="res://src/gameplay/entities/player/bullet_player.tscn" id="2_0mfjg"]
-[ext_resource type="Shader" uid="uid://d4gnm88je3w26" path="res://src/shaders/effects/sprite/Wobble_and_shadow.gdshader" id="3_tk761"]
-[ext_resource type="AudioStream" uid="uid://c11u8bjxas72p" path="res://assets/audio/sfx/hurt/hurt1.wav" id="4"]
+[ext_resource type="Shader" uid="uid://d4gnm88je3w26" path="res://src/shaders/effects/sprite/Wobble.gdshader" id="3_tk761"]
 [ext_resource type="Script" uid="uid://1gysj4qvljlo" path="res://src/components/health_component.gd" id="4_eb65w"]
-[ext_resource type="AudioStream" uid="uid://bs4wir50si5vo" path="res://assets/audio/sfx/dash/original_dash.wav" id="5"]
 [ext_resource type="Script" uid="uid://dpchwl51pc0ui" path="res://src/components/health_data.gd" id="5_4f0qm"]
 [ext_resource type="Script" uid="uid://dlgfycrugjthu" path="res://src/components/hurtbox_component.gd" id="7_tk761"]
-[ext_resource type="AudioStream" uid="uid://cx5siua0pec14" path="res://assets/audio/sfx/fire/mixkit-quick-jump-arcade-game-239.wav" id="8_tk761"]
+[ext_resource type="AudioStream" uid="uid://r2agth5220ms" path="res://assets/audio/sfx/fire/mixkit-quick-jump-arcade-game-239.ogg" id="9_wf1d4"]
+[ext_resource type="AudioStream" uid="uid://2lhcmwopqdyn" path="res://assets/audio/sfx/hurt/hurt1.ogg" id="10_wf1d4"]
+[ext_resource type="AudioStream" uid="uid://cpb276i5kk8es" path="res://assets/audio/sfx/dash/original_dash.ogg" id="11_agha6"]
 [ext_resource type="Texture2D" uid="uid://d1lqxbm4357rd" path="res://assets/art/characters/enemys/bullet_enemy.png" id="11_n7e5a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v2cuf"]
@@ -17,8 +17,6 @@ size = Vector2(25, 24)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n7e5a"]
 shader = ExtResource("3_tk761")
-shader_parameter/shadow_offset = Vector2(0, 1)
-shader_parameter/shadow_color = Color(0, 0, 0, 0.5)
 shader_parameter/wobble_strength = 1.2690000602775
 shader_parameter/wobble_speed = 3.750000178125
 
@@ -136,11 +134,11 @@ texture_scale = 3.75
 [node name="Audio" type="Node2D" parent="." unique_id=776089549]
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="Audio" unique_id=294778555]
-stream = ExtResource("8_tk761")
+stream = ExtResource("9_wf1d4")
 volume_db = 6.462
 
 [node name="Hurt" type="AudioStreamPlayer2D" parent="Audio" unique_id=7396161]
-stream = ExtResource("4")
+stream = ExtResource("10_wf1d4")
 
 [node name="Dash" type="AudioStreamPlayer2D" parent="Audio" unique_id=1821369333]
-stream = ExtResource("5")
+stream = ExtResource("11_agha6")

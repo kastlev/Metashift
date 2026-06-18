@@ -10,4 +10,3 @@ func _ready() -> void:
 
 func take_damage(amount: float, direction: Vector2 = Vector2.ZERO) -> void:
 	health_component.take_damage(amount, direction)
-	print("daño player recibido")

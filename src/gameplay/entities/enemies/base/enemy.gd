@@ -12,6 +12,10 @@ extends CharacterBody2D
 ## Qué tan rápido se frena el knockback recibido
 @export var knockback_friction: float = 900.0
 
+@export_group("Scale")
+## Escala global de la entidad — ajusta sprite y colisión juntos
+@export var entity_scale: float = 1.0
+
 @onready var animated_sprite: AnimatedSprite2D = %AnimatedSprite2D
 @onready var health: HealthComponent = %HealthComponent
 @onready var hurtbox: HurtboxComponent = %HurtboxComponent
@@ -42,13 +46,19 @@ enum STATE {
 @export var current_state: STATE = STATE.IDLE
 
 func _ready() -> void:
+	_apply_entity_scale()
 	animated_sprite.animation_finished.connect(_on_animation_finished)
 	health.damaged.connect(_on_health_damaged)
 	health.died.connect(_on_health_died)
 	animated_sprite.material = animated_sprite.material.duplicate()
 	timer_flash = Utils.create_timer(self, flash_duration, _on_timer_flash_timeout)
 	timer_destroy = Utils.create_timer(self, destroy_duration, _on_timer_destroy_timeout)
+	timer_flash.process_mode = Node.PROCESS_MODE_ALWAYS
 	_init_flash_shader_property()
+
+func _apply_entity_scale() -> void:
+	animated_sprite.scale *= entity_scale
+	collision_shape.scale *= entity_scale
 
 func _physics_process(delta: float) -> void:
 	if _knockback_velocity.length() > 1.0:
@@ -59,7 +69,7 @@ func _physics_process(delta: float) -> void:
 		death_velocity.y += 1300 * delta
 		global_position += death_velocity * delta
 		rotation += death_rotation_speed * delta
-		animated_sprite.modulate = Color(1, 1, 1, 0.4)
+		animated_sprite.modulate = Color(1, 1, 1, 1)
 		return
 	
 	_flip_sprite()
@@ -144,6 +154,7 @@ func flash() -> void:
 	timer_flash.start()
 
 func _on_timer_flash_timeout() -> void:
+	print("FLASH OFF")
 	animated_sprite.material.set_shader_parameter("get_hit", false)
 	
 func _on_timer_destroy_timeout():

@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cxilwsxgs6hor" path="res://src/gameplay/entities/enemies/enemy_fly.gd" id="1_eb487"]
 [ext_resource type="PackedScene" uid="uid://dfm76vdop74nd" path="res://src/gameplay/entities/enemies/base/bullet_enemy.tscn" id="2_3nloh"]
-[ext_resource type="Shader" uid="uid://dl1ta6qtnkpi7" path="res://src/shaders/effects/vfx/damage_flash_shake.gdshader" id="3_ac1cv"]
 [ext_resource type="Texture2D" uid="uid://dima6spmq81gg" path="res://assets/art/characters/enemys/death_animation_final_3-Sheet.png" id="3_w67d4"]
+[ext_resource type="Shader" uid="uid://dl1ta6qtnkpi7" path="res://src/shaders/effects/vfx/damage_flash_shake.gdshader" id="3_wx788"]
 [ext_resource type="Texture2D" uid="uid://6u8yvy7yn0jd" path="res://assets/art/characters/enemys/enemy_03-Sheet_final.png" id="4_ac1cv"]
 [ext_resource type="Script" uid="uid://1gysj4qvljlo" path="res://src/components/health_component.gd" id="5_korna"]
 [ext_resource type="Script" uid="uid://dpchwl51pc0ui" path="res://src/components/health_data.gd" id="6_nee33"]
@@ -12,8 +12,10 @@
 [ext_resource type="Script" uid="uid://c0cbgx52630x1" path="res://src/components/detection_component.gd" id="9_uvl3y"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_korna"]
-shader = ExtResource("3_ac1cv")
+shader = ExtResource("3_wx788")
 shader_parameter/get_hit = false
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/opacity = 1.0
 shader_parameter/shake_intensity = 10.0
 shader_parameter/shake_strength = 0.0
 shader_parameter/shake_speed = 30.0
@@ -93,6 +95,7 @@ radius = 186.011
 radius = 22.0
 
 [node name="EnemyFly" type="CharacterBody2D" unique_id=845573052 groups=["enemy"]]
+scale = Vector2(0.9, 0.9)
 motion_mode = 1
 safe_margin = 20.0
 script = ExtResource("1_eb487")

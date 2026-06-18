@@ -61,7 +61,6 @@ static func push_enemies_from_point(scene_tree: SceneTree, origin: Vector2, radi
 		var enemy := node as Enemy
 		if enemy.is_dead:
 			return
-		print(enemy, enemy is Enemy) 
 		var offset = enemy.global_position - origin
 		var dist = offset.length()
 		if dist > radius:
@@ -71,4 +70,3 @@ static func push_enemies_from_point(scene_tree: SceneTree, origin: Vector2, radi
 		var falloff = 1.0 - (dist / radius)
 		print(direction * force * falloff)
 		enemy.apply_knockback(direction * force * falloff)
-		print("fuerza aplicada")

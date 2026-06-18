@@ -14,6 +14,8 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_muad4"]
 shader = ExtResource("3_k42fe")
 shader_parameter/get_hit = false
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/opacity = 1.0
 shader_parameter/shake_intensity = 10.0
 shader_parameter/shake_strength = 0.0
 shader_parameter/shake_speed = 30.0
@@ -93,6 +95,7 @@ radius = 186.011
 radius = 22.0
 
 [node name="EnemyBee" type="CharacterBody2D" unique_id=736086891 groups=["enemy"]]
+scale = Vector2(0.9, 0.9)
 motion_mode = 1
 safe_margin = 20.0
 script = ExtResource("1_gku7h")

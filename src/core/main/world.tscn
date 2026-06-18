@@ -8,27 +8,37 @@
 [ext_resource type="PackedScene" uid="uid://ces1b4b2cxm5b" path="res://src/gameplay/entities/player/player.tscn" id="6_ehu7x"]
 [ext_resource type="Texture2D" uid="uid://dngq4jxe6dflr" path="res://assets/art/world/backgrouds/background.png" id="7_efw5t"]
 [ext_resource type="PackedScene" uid="uid://dyy5qut610exk" path="res://src/gameplay/map/limit_world.tscn" id="8_7l8xo"]
-[ext_resource type="Shader" uid="uid://begm7buui3xs1" path="res://src/shaders/effects/overlay/wet_screen.gdshader" id="9_7x3nt"]
+[ext_resource type="Script" uid="uid://docx3g31omwp3" path="res://src/shaders/shader_overlay_manager.gd" id="9_0vkfw"]
 [ext_resource type="Shader" uid="uid://duvbuhkxqp5oc" path="res://src/shaders/effects/overlay/atmospheric_flow.gdshader" id="10_v55iv"]
 [ext_resource type="Shader" uid="uid://clpqj0fqasbah" path="res://src/shaders/effects/overlay/floating_particles.gdshader" id="11_4t2tg"]
 [ext_resource type="Shader" uid="uid://cgy6dmtg2nak6" path="res://src/shaders/effects/overlay/rain/rain.gdshader" id="12_3it77"]
 [ext_resource type="Shader" uid="uid://bmbvcgbq2g877" path="res://src/shaders/effects/overlay/rain/rain_and_snow_with_parallax.gdshader" id="13_hwo8a"]
-[ext_resource type="Shader" uid="uid://45npvnvdcu0c" path="res://src/shaders/effects/vfx/shockwave.gdshader" id="14_h3m0t"]
-[ext_resource type="Script" uid="uid://c8j6ai6yni62a" path="res://src/gameplay/map/shockwave.gd" id="15_q1fs6"]
+[ext_resource type="Shader" uid="uid://dhf83jqxbga3r" path="res://src/shaders/effects/screen_damage_flash.gdshader" id="16_6c5ax"]
 [ext_resource type="Shader" uid="uid://btv8weqryik7s" path="res://src/shaders/effects/overlay/circle_transition.gdshader" id="16_rk7sw"]
-[ext_resource type="Shader" uid="uid://bsiwrrcvjxgh1" path="res://src/shaders/color/color_correction.gdshader" id="17_e1tea"]
-[ext_resource type="Shader" uid="uid://bywy4eipehn6k" path="res://src/shaders/probando21.gdshader" id="18_fnfd3"]
+[ext_resource type="Shader" uid="uid://cbewvjkdp4eeh" path="res://src/shaders/propios/broken_glass.gdshader" id="17_fnfd3"]
+[ext_resource type="Script" uid="uid://bjmmmvbl6emui" path="res://src/screens/player_ui.gd" id="18_peh15"]
+[ext_resource type="Shader" uid="uid://chdglgtp00c5b" path="res://src/shaders/paralax.gdshader" id="18_wh075"]
 [ext_resource type="Script" uid="uid://bwhig7un3gnjk" path="res://src/core/main/heart_hud.gd" id="19_peh15"]
 [ext_resource type="PackedScene" uid="uid://btf64fgpyh2xo" path="res://src/screens/Heart.tscn" id="19_sh2w7"]
 [ext_resource type="FontFile" uid="uid://bsanmgeyeko30" path="res://assets/art/ui/fonts/Jersey10-Regular.ttf" id="20_xtj10"]
 [ext_resource type="Texture2D" uid="uid://denynd8bnl2vi" path="res://assets/art/ui/hud/reticle.png" id="21_ih5sr"]
 [ext_resource type="Script" uid="uid://bmot0wn7ys7pw" path="res://src/screens/reticle.gd" id="22_4bewh"]
+[ext_resource type="Texture2D" uid="uid://ctpo8f5phnpi8" path="res://assets/art/ui/hud/rondas-Sheet.png" id="23_sh2w7"]
+[ext_resource type="Shader" uid="uid://ddks5fmx3lr41" path="res://src/shaders/blur_h.gdshader" id="24_ehu7x"]
+[ext_resource type="Shader" uid="uid://c2ujh1nc1k2tm" path="res://src/shaders/blur_v_tint.gdshader" id="25_efw5t"]
+[ext_resource type="Script" uid="uid://1osc5x7po2gp" path="res://src/screens/menu_pause.gd" id="25_q1d4o"]
+[ext_resource type="AudioStream" uid="uid://bg1d7akg3c72a" path="res://assets/audio/sfx/ui/menu_pause/mixkit-typewriter-hit-1362.wav" id="26_efw5t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wh075"]
+shader = ExtResource("18_wh075")
+shader_parameter/scroll_speed = 0.10000000475
+shader_parameter/scroll_offset = Vector2(0, 0)
 
 [sub_resource type="Environment" id="Environment_ga2aj"]
 background_mode = 3
 adjustment_enabled = true
-adjustment_brightness = 1.2
-adjustment_contrast = 1.055
+adjustment_brightness = 1.15
+adjustment_contrast = 0.95
 adjustment_saturation = 1.01
 
 [sub_resource type="Gradient" id="Gradient_n7e5a"]
@@ -48,10 +58,135 @@ _data = {
 }
 point_count = 5
 
+[sub_resource type="Shader" id="Shader_peh15"]
+code = "shader_type canvas_item;
+
+render_mode unshaded;
+uniform float rain_amount : hint_range(0.0, 1.0) = 0.7;
+uniform float blue_amount : hint_range(0.0, 1.0) = 1.0;
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture;
+
+const float M_PI = 3.14159;
+const float M_2PI = 6.28318;
+
+vec3 N13(float p) {
+	vec3 p3 = fract(vec3(p) * vec3(.1031, .11369, .13787));
+	p3 += dot(p3, p3.yzx + 19.19);
+	return fract(vec3((p3.x + p3.y) * p3.z, (p3.x + p3.z) * p3.y, (p3.y + p3.z) * p3.x));
+}
+
+float N(float t) {
+	return fract(sin(t * 12345.564) * 7658.76);
+}
+
+float Saw(float b, float t) {
+	return smoothstep(0.0, b, t) * smoothstep(1.0, b, t);
+}
+
+float sdEgg(vec2 p, float ra, float rb) {
+	const float k = sqrt(3.0);
+	p.x = abs(p.x);
+	float r = ra - rb;
+	return ((p.y < 0.0) ? length(vec2(p.x, p.y)) - r : (k * (p.x + r) < p.y) ? length(vec2(p.x, p.y - k * r)) : length(vec2(p.x + r, p.y)) - 2.0 * r) - rb;
+}
+
+vec2 DropLayer2(vec2 uv, float t, vec2 densityScale) {
+	vec2 a = vec2(6.0, 1.0) * densityScale;
+	vec2 grid = a * 2.0;
+	vec2 id = floor(uv * grid);
+	float gridFall = N(id.x) / 3.0 + 0.5;
+
+	uv.y -= t * gridFall / a.y;
+
+	id = floor(uv * grid);
+	uv.y += N(id.x);
+	id = floor(uv * grid);
+	vec2 st = fract(uv * grid) - vec2(0.5, 0.0);
+	vec3 n = N13(id.x * 35.2 + id.y * 2376.1);
+	float x = n.x - 0.5;
+	
+	// Suavizamos el balanceo horizontal para que no rompa la dirección de caída
+	x += sin(uv.y * 20.0 + sin(uv.y * 20.0)) * (0.5 - abs(x)) * (n.z - 0.5) * 0.3;
+	x *= 0.6;
+	
+	float ti = fract(t * (gridFall + 0.1) + n.z);
+	
+	// CAMBIO: Ahora 'y' va estrictamente de 1.0 a 0.0 (de arriba a abajo) de forma lineal/suave
+	float y = 1.0 - ti; 
+	
+	// CAMBIO: Ajustamos la deformación física de la gota para que no \"salte\" hacia arriba al final
+	float dropShape = mix(0.0, -0.2, ti); 
+	
+	float d = sdEgg((st - vec2(x, y)) * a.yx, 0.0, dropShape);
+	float diameter = N(id.x + id.y) / 7.0 + 0.2;
+	float mainDrop = smoothstep(diameter / 1.5, 0.0, d);
+	
+	// CAMBIO: El rastro (trail) ahora sigue correctamente a la gota hacia abajo
+	float r2 = smoothstep(1.0, y, st.y);
+	float trail = smoothstep(diameter * 0.75 * sqrt(r2), 0.0, abs(st.x - x));
+	trail *= r2 * smoothstep(-0.05, 0.05, st.y - y) * 0.5;
+	
+	return vec2(mainDrop, trail);
+}
+
+float StaticDrops(vec2 uv, float t) {
+	uv *= 40.0;
+	vec2 id = floor(uv);
+	vec3 n = N13(id.x * 106.45 + id.y * 3543.654);
+	vec2 center = (n.xy - 0.5) * 0.6;
+	uv = fract(uv) - 0.5;
+	float d = length(uv - center.xy);
+	float drop = smoothstep(0.3, 0.0, d);
+	float fade = Saw(0.10, fract(t + n.y));
+	return drop * fade * fract(n.z * 27.0);
+}
+
+vec2 Drops(vec2 uv, float t, float l0, float l1, float l2) {
+	float s = StaticDrops(uv, t) * l0;
+	vec2 m1 = DropLayer2(uv, t, vec2(1.0)) * l1;
+	vec2 m2 = DropLayer2(uv * 1.85, t, vec2(1.0)) * l2;
+	float c = smoothstep(0.3, 1.0, s + m1.x + m2.x);
+	return vec2(c, m1.y + m2.y);
+}
+
+void fragment() {
+	vec2 resolution = 1.0 / SCREEN_PIXEL_SIZE;
+	vec2 aspect_uv = (FRAGCOORD.xy - 0.5 * resolution.xy) / resolution.y;
+	float t = TIME * 0.2;
+
+	float staticDrops = smoothstep(-0.5, 1.0, rain_amount) * 2.0;
+	float layer1 = smoothstep(0.25, 0.75, rain_amount);
+	float layer2 = smoothstep(0.0, 0.5, rain_amount);
+
+	vec2 c = Drops(aspect_uv, t, staticDrops, layer1, layer2);
+
+	vec2 e = 0.5 / resolution;
+	float cx = Drops(aspect_uv + vec2(e.x, 0.0), t, staticDrops, layer1, layer2).x;
+	float cy = Drops(aspect_uv + vec2(0.0, e.y), t, staticDrops, layer1, layer2).x;
+	vec2 n = vec2(cx - c.x, cy - c.x);
+
+	float maxBlur = mix(3.0, 6.0, rain_amount);
+	float minBlur = 2.0;
+	float focus = mix(maxBlur - c.y, minBlur, smoothstep(0.1, 0.2, c.x));
+
+	vec3 col = texture(SCREEN_TEXTURE, SCREEN_UV + n).rgb;
+
+
+	vec3 target_color = mix(vec3(1.0), vec3(0.8, 0.9, 1.3), blue_amount);
+
+	float colFade = sin(t * 0.2) * 0.5 + 0.5;
+	col *= mix(vec3(1.0), target_color, colFade);
+
+	vec2 vignette_uv = SCREEN_UV - 0.5;
+	col *= 1.0 - dot(vignette_uv, vignette_uv);
+
+	COLOR = vec4(col, 1.0);
+}"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hnekq"]
-shader = ExtResource("9_7x3nt")
-shader_parameter/rain_amount = 0.410000019475
-shader_parameter/blue_amount = 0.0
+shader = SubResource("Shader_peh15")
+shader_parameter/rain_amount = 1.0
+shader_parameter/blue_amount = 0.4150000197125
 
 [sub_resource type="Gradient" id="Gradient_m1kwo"]
 
@@ -74,7 +209,7 @@ noise = SubResource("FastNoiseLite_5ksmn")
 normalize = false
 
 [sub_resource type="Gradient" id="Gradient_kemb1"]
-offsets = PackedFloat32Array(0, 0.53431374, 1)
+offsets = PackedFloat32Array(0, 0.6127451, 1)
 colors = PackedColorArray(0.15487596, 0.154876, 0.15487596, 0.22352941, 0.38826033, 0.26499015, 0.41931605, 0.2784314, 0.5120425, 0.75516844, 0.6755856, 0.34901962)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ybvxh"]
@@ -92,7 +227,6 @@ width = 254
 height = 254
 noise = SubResource("FastNoiseLite_ybvxh")
 color_ramp = SubResource("Gradient_kemb1")
-seamless = true
 normalize = false
 seamless_blend_skirt = 0.14
 
@@ -112,7 +246,14 @@ shader = ExtResource("11_4t2tg")
 shader_parameter/effect_color = Color(1.353, 0.771315, 0.7817955, 1)
 shader_parameter/width = 0.4130000196175
 shader_parameter/speed = 1.9290000916275
+shader_parameter/flow_direction = Vector2(0, -1)
 shader_parameter/num_of_layers = 2
+shader_parameter/layer_spacing = 0.5
+shader_parameter/distortion_strength = 1.0
+shader_parameter/dof_strength = 5.0
+shader_parameter/dof_speed = 0.1
+shader_parameter/layer_seed = 7.238917
+shader_parameter/base_brightness = 0.1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_x1gfj"]
 shader = ExtResource("12_3it77")
@@ -137,67 +278,67 @@ shader_parameter/base_rain_speed = 0.42500001692762
 shader_parameter/additional_rain_speed = 0.5
 shader_parameter/slant = -0.00699995283249998
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_73o8u"]
-shader = ExtResource("14_h3m0t")
-shader_parameter/center = Vector2(0.5, 0.5)
-shader_parameter/size = 0.2
-shader_parameter/width = 0.1
-shader_parameter/intensity = 0.1
-shader_parameter/chromatic_offset = 0.0
-shader_parameter/alpha = 0.3050000144875
-shader_parameter/ring_color = Color(1, 1, 1, 1)
-shader_parameter/ring_visibility = 0.26000001235
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4fcaq"]
 shader = ExtResource("16_rk7sw")
-shader_parameter/circle_size = 1.04999995231628
+shader_parameter/circle_size = 0.0
 shader_parameter/screen_width = 2.63
 shader_parameter/screen_height = 8.645
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cl2ww"]
-shader = ExtResource("17_e1tea")
-shader_parameter/master_hue = -0.4999973252346024
-shader_parameter/shadow_hue = -180.0
-shader_parameter/low_mid_hue = 34.30000319332717
-shader_parameter/mid_hue = 85.70000395924882
-shader_parameter/up_mid_hue = 0.0
-shader_parameter/high_hue = 0.0
-shader_parameter/master_sat = 0.746000035435
-shader_parameter/shadow_sat = 1.1950000567625
-shader_parameter/low_mid_sat = 1.0800000513
-shader_parameter/mid_sat = 1.0
-shader_parameter/up_mid_sat = 1.0
-shader_parameter/high_sat = 1.0
-shader_parameter/master_val = 0.8890000422275
-shader_parameter/shadow_val = -0.21599998418092992
-shader_parameter/low_mid_val = -0.0299999753459299
-shader_parameter/mid_val = -0.13999998057093
-shader_parameter/up_mid_val = 0.0
-shader_parameter/high_val = 0.43200004659907
-shader_parameter/contrast = 1.10000024225
-shader_parameter/pivot = 0.0630000029925
-shader_parameter/enable_colour_splash = true
-shader_parameter/primary_hue = 0.0
-shader_parameter/primary_range = 0.422000020045
-shader_parameter/primary_strength = 0.999999977648
-shader_parameter/enable_secondary = false
-shader_parameter/secondary_hue = 0.0
-shader_parameter/secondary_range = 0.1710000081225
-shader_parameter/secondary_strength = 1.999999955296
-shader_parameter/desat_outside = 0.76999998278896
-shader_parameter/monochrome_mode = false
-shader_parameter/tint_strength = 0.0
-shader_parameter/tint_color = Color(1.2, 1, 0.8, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fnfd3"]
+shader = ExtResource("16_6c5ax")
+shader_parameter/flash_color = Color(1, 0, 0, 1)
+shader_parameter/intensity = 0.8550000406125
+shader_parameter/edge_power = 0.60400002543012
+shader_parameter/inner_ratio = 0.78000003705
+shader_parameter/feather = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sh2w7"]
-shader = ExtResource("18_fnfd3")
-shader_parameter/shaking = true
-shader_parameter/amplitude = 6.16
-shader_parameter/noise_scale = 98.63
-shader_parameter/noise_speed = 0.0
+shader = ExtResource("17_fnfd3")
+shader_parameter/crack_depth = 3.4530001640175
+shader_parameter/crack_scale = 1.0
+shader_parameter/crack_zebra_scale = 3.054000145065
+shader_parameter/crack_zebra_amp = 0.2330000110675
+shader_parameter/crack_profile = 0.402000019095
+shader_parameter/crack_slope = 31.1990014819525
+shader_parameter/crack_width = 0.0010000000475
+shader_parameter/refraction_offset = Vector2(15.545, 25)
+shader_parameter/reflection_offset = Vector2(6.61, 1)
+shader_parameter/reflection_color = Color(0, 0, 0, 0.5019608)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_efw5t"]
+resource_local_to_scene = true
+shader = ExtResource("24_ehu7x")
+shader_parameter/samples = 22
+shader_parameter/blur_amount = 5.0000002375
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7l8xo"]
+resource_local_to_scene = true
+shader = ExtResource("25_efw5t")
+shader_parameter/samples = 22
+shader_parameter/blur_amount = 1.0
+shader_parameter/tint_color = Color(0, 0, 0, 0.388)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_efw5t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wh075"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q1d4o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ehu7x"]
+
+[sub_resource type="Theme" id="Theme_wh075"]
+default_font = ExtResource("20_xtj10")
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_focus_color = Color(1, 0.85, 0.2, 1)
+Button/colors/font_hover_color = Color(1, 0.8509804, 0.2, 1)
+Button/colors/font_pressed_color = Color(1, 0.851, 0.2, 1)
+Button/font_sizes/font_size = 40
+Button/styles/focus = SubResource("StyleBoxEmpty_efw5t")
+Button/styles/hover = SubResource("StyleBoxEmpty_wh075")
+Button/styles/normal = SubResource("StyleBoxEmpty_q1d4o")
+Button/styles/pressed = SubResource("StyleBoxEmpty_ehu7x")
 
 [node name="World" type="Node" unique_id=412242337 groups=["level"]]
-process_mode = 3
 script = ExtResource("1_fnfd3")
 enemy_scenes = Array[PackedScene]([ExtResource("2_sh2w7"), ExtResource("3_peh15"), ExtResource("4_wh075")])
 
@@ -224,15 +365,6 @@ process_mode = 1
 [node name="Player" parent="World/EntityRoot" unique_id=2146404342 instance=ExtResource("6_ehu7x")]
 unique_name_in_owner = true
 position = Vector2(574, 322)
-fire_cooldown = 0.25
-bullet_speed = 1300.0
-speed = 600.0
-acceleration = 4000.0
-friction = 5000.0
-dash_speed = 1200.0
-dash_acceleration = 100.0
-dash_friction = 1050.0
-dash_duration = 0.1
 
 [node name="LevelRoot" type="Node2D" parent="World" unique_id=1990981021]
 
@@ -248,6 +380,8 @@ wait_time = 9.0
 [node name="Environment" type="Node2D" parent="World/LevelRoot" unique_id=1625859885]
 
 [node name="Background" type="Sprite2D" parent="World/LevelRoot/Environment" unique_id=696383519]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_wh075")
 position = Vector2(576, 324)
 scale = Vector2(3, 3)
 texture = ExtResource("7_efw5t")
@@ -259,7 +393,8 @@ metadata/_edit_lock_ = true
 environment = SubResource("Environment_ga2aj")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="World/LevelRoot/Environment/PostProcess" unique_id=86637150]
-color = Color(0.99999946, 0.87801355, 0.8424086, 1)
+unique_name_in_owner = true
+color = Color(0.84097606, 0.86205214, 0.85477793, 1)
 
 [node name="Light" type="Node2D" parent="World/LevelRoot/Environment" unique_id=74103423]
 
@@ -270,9 +405,9 @@ blend_mode = 1
 
 [node name="PointLight2D" type="PointLight2D" parent="World/LevelRoot/Environment/Light" unique_id=154034939]
 position = Vector2(572, 328)
-energy = 0.26
+energy = 0.38
 texture = SubResource("GradientTexture2D_ga2aj")
-texture_scale = 6.28
+texture_scale = 5.7
 
 [node name="SpawnPoints" type="Node2D" parent="World/LevelRoot" unique_id=864468147]
 
@@ -293,8 +428,10 @@ rotation = -3.1407359
 [node name="walls" parent="World/LevelRoot/Collision" unique_id=208797545 instance=ExtResource("8_7l8xo")]
 
 [node name="ScreenFXLayer" type="CanvasLayer" parent="." unique_id=1747609686]
-process_mode = 3
+unique_name_in_owner = true
+process_mode = 1
 layer = 5
+script = ExtResource("9_0vkfw")
 
 [node name="WetScreen" type="ColorRect" parent="ScreenFXLayer" unique_id=728561920]
 visible = false
@@ -342,16 +479,6 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
-[node name="Shockwave" type="ColorRect" parent="ScreenFXLayer" unique_id=1081278707 groups=["shockwave"]]
-visible = false
-material = SubResource("ShaderMaterial_73o8u")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("15_q1fs6")
-
 [node name="Transition" type="ColorRect" parent="ScreenFXLayer" unique_id=1767228899]
 unique_name_in_owner = true
 visible = false
@@ -363,16 +490,16 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="ColorCorrection" type="ColorRect" parent="ScreenFXLayer" unique_id=985855584]
+[node name="DamageFlash" type="ColorRect" parent="ScreenFXLayer" unique_id=1388670995]
 visible = false
-material = SubResource("ShaderMaterial_cl2ww")
+material = SubResource("ShaderMaterial_fnfd3")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="ScreenFXLayer" unique_id=724410847]
+[node name="BrokenGlass" type="ColorRect" parent="ScreenFXLayer" unique_id=1768798429]
 visible = false
 material = SubResource("ShaderMaterial_sh2w7")
 anchors_preset = 15
@@ -380,11 +507,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.29954746, 0.29954746, 0.29954743, 0.48235294)
 
 [node name="HudLayer" type="CanvasLayer" parent="." unique_id=645710007]
 process_mode = 1
-layer = 10
 
 [node name="PlayerUI" type="Control" parent="HudLayer" unique_id=1536899901]
 layout_mode = 3
@@ -393,6 +518,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("18_peh15")
+
+[node name="Rounds" type="Sprite2D" parent="HudLayer/PlayerUI" unique_id=450150047]
+unique_name_in_owner = true
+visible = false
+position = Vector2(574, 32)
+scale = Vector2(4, 4)
+texture = ExtResource("23_sh2w7")
+hframes = 5
 
 [node name="MarginContainer" type="MarginContainer" parent="HudLayer/PlayerUI" unique_id=714913927]
 layout_mode = 0
@@ -441,17 +575,133 @@ press [Enter] to start"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="Reticle" type="Sprite2D" parent="HudLayer" unique_id=1871262358]
+[node name="PauseLayer" type="CanvasLayer" parent="." unique_id=1263715369]
 unique_name_in_owner = true
+process_mode = 3
+layer = 20
+script = ExtResource("25_q1d4o")
+
+[node name="Control" type="Control" parent="PauseLayer" unique_id=40976332]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BlurH" type="ColorRect" parent="PauseLayer/Control" unique_id=1815457731]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_efw5t")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="PauseLayer/Control" unique_id=1236897659]
+unique_name_in_owner = true
+copy_mode = 2
+
+[node name="BlurV" type="ColorRect" parent="PauseLayer/Control" unique_id=104483452]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_7l8xo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FrozenBlur" type="TextureRect" parent="PauseLayer/Control" unique_id=1851183357]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseLayer/Control" unique_id=1924696922]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.5
+offset_top = -50.5
+offset_right = 98.5
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_wh075")
+theme_override_constants/separation = -4
+
+[node name="Resume" type="Button" parent="PauseLayer/Control/VBoxContainer" unique_id=364265736]
+unique_name_in_owner = true
+process_mode = 3
+layout_mode = 2
+focus_neighbor_top = NodePath("../Quit")
+text = "Resume"
+
+[node name="Retry" type="Button" parent="PauseLayer/Control/VBoxContainer" unique_id=911720202]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Retry"
+
+[node name="Opcions" type="Button" parent="PauseLayer/Control/VBoxContainer" unique_id=1434359744]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Opcions"
+
+[node name="Quit" type="Button" parent="PauseLayer/Control/VBoxContainer" unique_id=1604803453]
+unique_name_in_owner = true
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Resume")
+text = "Quit"
+
+[node name="SfxHover" type="AudioStreamPlayer2D" parent="PauseLayer" unique_id=1844650196]
+unique_name_in_owner = true
+stream = ExtResource("26_efw5t")
+
+[node name="SfxConfirm" type="AudioStreamPlayer2D" parent="PauseLayer" unique_id=1624645322]
+unique_name_in_owner = true
+
+[node name="SfxBack" type="AudioStreamPlayer2D" parent="PauseLayer" unique_id=178381320]
+unique_name_in_owner = true
+
+[node name="SfxMenuPauseEntered" type="AudioStreamPlayer2D" parent="PauseLayer" unique_id=1348325863]
+unique_name_in_owner = true
+
+[node name="OverlayLayer" type="CanvasLayer" parent="." unique_id=1783980002]
+process_mode = 3
+layer = 30
+
+[node name="Reticle" type="Sprite2D" parent="OverlayLayer" unique_id=1871262358]
+unique_name_in_owner = true
+process_mode = 3
 z_index = 10
 position = Vector2(-75, 223)
 scale = Vector2(3, 3)
 texture = ExtResource("21_ih5sr")
 script = ExtResource("22_4bewh")
 
-[node name="PauseLayer" type="CanvasLayer" parent="." unique_id=1263715369]
+[node name="FadeLayer" type="CanvasLayer" parent="." unique_id=1787587272]
 process_mode = 3
-layer = 20
+layer = 50
+
+[node name="Fade" type="ColorRect" parent="FadeLayer" unique_id=356861712]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
 
 [connection signal="timeout" from="World/LevelRoot/Timers/SpawnerEnemy" to="." method="_on_spawn_enemy_timeout"]
 [connection signal="timeout" from="World/LevelRoot/Timers/TimerLevel" to="." method="_on_timer_level_timeout"]

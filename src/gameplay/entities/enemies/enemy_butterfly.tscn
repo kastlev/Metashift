@@ -16,6 +16,8 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pecx0"]
 shader = ExtResource("3_g1hry")
 shader_parameter/get_hit = false
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/opacity = 1.0
 shader_parameter/shake_intensity = 10.0
 shader_parameter/shake_strength = 0.0
 shader_parameter/shake_speed = 30.0
@@ -95,6 +97,7 @@ radius = 22.0
 
 [node name="EnemyButterfly" type="CharacterBody2D" unique_id=1247254801 groups=["enemy"]]
 material = SubResource("ShaderMaterial_fu0oh")
+scale = Vector2(0.9, 0.9)
 motion_mode = 1
 safe_margin = 20.0
 script = ExtResource("1_ls6xm")
