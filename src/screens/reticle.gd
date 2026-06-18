@@ -13,9 +13,12 @@ func _ready() -> void:
 	player.fired.connect(_pulse)
 	original_scale = scale
 
+func _process(_delta: float) -> void:
+	global_position = get_viewport().get_mouse_position()
 
 func _physics_process(delta):
 	rotation = lerp_angle(rotation, target_rotation, 95.0 * delta)
+
 func _pulse() -> void:
 	target_rotation += PI / 2.0
 	if _reticule_pulse_tween:
