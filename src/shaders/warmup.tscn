@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dvp4tc7qpcj3g"]
+
+[ext_resource type="Script" uid="uid://jivwt6mpb1en" path="res://src/shaders/shader_warmup.gd" id="1_mbgbo"]
+
+[node name="Warmup" type="CanvasLayer" unique_id=101358284]
+script = ExtResource("1_mbgbo")
+next_scene = null
+warmup_frames = null
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1351265015]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

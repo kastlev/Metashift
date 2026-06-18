@@ -1,11 +1,14 @@
 shader_type canvas_item;
 
-// Shadow
-uniform vec2 shadow_offset = vec2(0.0, 1.0);
-uniform vec4 shadow_color : source_color = vec4(0.0, 0.0, 0.0, 0.5);
-
-// Wobble
+/**
+ * Intensidad de la deformación.
+ * Valores altos generan un movimiento más exagerado.
+ */
 uniform float wobble_strength : hint_range(0.0, 3.0) = 0.8;
+
+/**
+ * Velocidad de la animación.
+ */
 uniform float wobble_speed : hint_range(0.0, 10.0) = 2.0;
 
 void vertex() {
@@ -14,16 +17,12 @@ void vertex() {
 }
 
 void fragment() {
-	// Sombra
-	float a = texture(TEXTURE, UV - shadow_offset * TEXTURE_PIXEL_SIZE).a;
-	vec4 shadow = vec4(shadow_color.rgb, shadow_color.a * a);
-
 	vec4 sprite = texture(TEXTURE, UV);
-	
-	// Flash respetado
+
+	// Compatibilidad con flashes y modulación externa
 	if (COLOR.r > 1.0 || COLOR.g != COLOR.b) {
 		sprite.rgb = COLOR.rgb * sprite.a;
 	}
 
-	COLOR = mix(shadow, sprite, sprite.a);
+	COLOR = sprite;
 }
