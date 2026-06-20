@@ -2,7 +2,7 @@ extends Control
 
 @export var heart_scene: PackedScene
 
-@onready var container: HBoxContainer = $HBoxContainer
+@onready var container: HBoxContainer = $heartsContainer
 
 var hearts: Array[Heart] = []
 
@@ -18,7 +18,6 @@ func _ready() -> void:
 	_update_hearts(player.health.current_health)
 	
 func _build_hearts(max_health: int) -> void:
-	print("BUILD HEARTS CALLED:", max_health, "ID:", get_instance_id())
 	# limpiar anterior
 	for c in hearts:
 		c.queue_free()
@@ -35,9 +34,7 @@ func _update_hearts(current: int) -> void:
 		hearts[i].set_full(i < current)
 
 func _on_health_changed(current: float, _max_health: float) -> void:
-	print("actualinado hud health")
 	_update_hearts(int(current))
 
 func _on_max_health_changed(max_health: int) -> void:
-	print("MAX HEALTH SIGNAL:", max_health)
 	_build_hearts(max_health)

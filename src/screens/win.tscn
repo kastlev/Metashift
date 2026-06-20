@@ -35,5 +35,5 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("1")
-theme_override_font_sizes/font_size = 90
+theme_override_font_sizes/font_size = 30
 text = "Thank you for playing"

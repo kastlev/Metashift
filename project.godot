@@ -13,7 +13,7 @@ config_version=5
 config/name="Metashift"
 config/tags=PackedStringArray("2d", "best_practices", "shaders")
 run/main_scene="uid://dvp4tc7qpcj3g"
-config/features=PackedStringArray("4.6", "Mobile")
+config/features=PackedStringArray("4.7", "Mobile")
 run/max_fps=90
 config/icon="res://assets/art/ui/hud/lifes.png"
 
@@ -25,9 +25,9 @@ GameCameraService="*uid://bnbcbopagnabk"
 
 [display]
 
+window/size/viewport_width=480
+window/size/viewport_height=270
 window/size/mode=4
-window/size/window_width_override=1280
-window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image_hotspot=Vector2(-10, -10)
 

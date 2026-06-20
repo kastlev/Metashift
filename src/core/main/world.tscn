@@ -54,7 +54,7 @@ fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="Curve2D" id="Curve2D_qkwvq"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 1160, -3, 0, 0, 0, 0, -7, -4, 0, 0, 0, 0, -6, 649, 0, 0, 0, 0, 1153, 652, 0, 0, 0, 0, 1160, -3)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 270, 0, 0, 0, 0, 0, 270, 0, 0, 0, 0, 0, 0)
 }
 point_count = 5
 
@@ -332,7 +332,7 @@ Button/colors/font_color = Color(1, 1, 1, 1)
 Button/colors/font_focus_color = Color(1, 0.85, 0.2, 1)
 Button/colors/font_hover_color = Color(1, 0.8509804, 0.2, 1)
 Button/colors/font_pressed_color = Color(1, 0.851, 0.2, 1)
-Button/font_sizes/font_size = 40
+Button/font_sizes/font_size = 18
 Button/styles/focus = SubResource("StyleBoxEmpty_efw5t")
 Button/styles/hover = SubResource("StyleBoxEmpty_wh075")
 Button/styles/normal = SubResource("StyleBoxEmpty_q1d4o")
@@ -345,8 +345,8 @@ enemy_scenes = Array[PackedScene]([ExtResource("2_sh2w7"), ExtResource("3_peh15"
 [node name="Camera" type="Camera2D" parent="." unique_id=1603145003]
 limit_left = 0
 limit_top = 0
-limit_right = 1152
-limit_bottom = 648
+limit_right = 480
+limit_bottom = 270
 script = ExtResource("5_q1d4o")
 follow_smooth = false
 follow_smoothing = 0.0
@@ -364,7 +364,7 @@ process_mode = 1
 
 [node name="Player" parent="World/EntityRoot" unique_id=2146404342 instance=ExtResource("6_ehu7x")]
 unique_name_in_owner = true
-position = Vector2(574, 322)
+position = Vector2(240, 135)
 
 [node name="LevelRoot" type="Node2D" parent="World" unique_id=1990981021]
 
@@ -382,8 +382,7 @@ wait_time = 9.0
 [node name="Background" type="Sprite2D" parent="World/LevelRoot/Environment" unique_id=696383519]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_wh075")
-position = Vector2(576, 324)
-scale = Vector2(3, 3)
+position = Vector2(240, 135)
 texture = ExtResource("7_efw5t")
 metadata/_edit_lock_ = true
 
@@ -404,24 +403,22 @@ energy = 0.0
 blend_mode = 1
 
 [node name="PointLight2D" type="PointLight2D" parent="World/LevelRoot/Environment/Light" unique_id=154034939]
-position = Vector2(572, 328)
+position = Vector2(240, 135)
 energy = 0.38
 texture = SubResource("GradientTexture2D_ga2aj")
-texture_scale = 5.7
+texture_scale = 3.0
 
 [node name="SpawnPoints" type="Node2D" parent="World/LevelRoot" unique_id=864468147]
 
 [node name="StartPositionPlayer" type="Marker2D" parent="World/LevelRoot/SpawnPoints" unique_id=2116523845]
 unique_name_in_owner = true
-position = Vector2(576, 324)
+position = Vector2(240, 135)
 
 [node name="PathSpawnEnemy" type="Path2D" parent="World/LevelRoot/SpawnPoints" unique_id=560019550]
 curve = SubResource("Curve2D_qkwvq")
 
 [node name="PathFollowSpawnEnemy" type="PathFollow2D" parent="World/LevelRoot/SpawnPoints/PathSpawnEnemy" unique_id=781825569]
 unique_name_in_owner = true
-position = Vector2(1160, -3)
-rotation = -3.1407359
 
 [node name="Collision" type="Node2D" parent="World/LevelRoot" unique_id=394419324]
 
@@ -522,47 +519,51 @@ script = ExtResource("18_peh15")
 
 [node name="Rounds" type="Sprite2D" parent="HudLayer/PlayerUI" unique_id=450150047]
 unique_name_in_owner = true
-visible = false
-position = Vector2(574, 32)
-scale = Vector2(4, 4)
+position = Vector2(240, 16)
 texture = ExtResource("23_sh2w7")
 hframes = 5
 
 [node name="MarginContainer" type="MarginContainer" parent="HudLayer/PlayerUI" unique_id=714913927]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 0
 script = ExtResource("19_peh15")
 heart_scene = ExtResource("19_sh2w7")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HudLayer/PlayerUI/MarginContainer" unique_id=308085994]
+[node name="heartsContainer" type="HBoxContainer" parent="HudLayer/PlayerUI/MarginContainer" unique_id=308085994]
 layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="TutorialUI" type="Control" parent="HudLayer" unique_id=886596434]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="TextTutorial" type="Label" parent="HudLayer/TutorialUI" unique_id=1381830542]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 236.0
-offset_top = 33.0
-offset_right = 868.0
-offset_bottom = 666.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0.4359535, 0.4359535, 0.4359535, 0.21568628)
-theme_override_constants/shadow_offset_x = 6
+theme_override_constants/line_spacing = -1
+theme_override_constants/shadow_offset_x = 1
 theme_override_fonts/font = ExtResource("20_xtj10")
-theme_override_font_sizes/font_size = 45
-text = "[WASD] to move, [space] to dash and [Left Mouse Button] to shoot
+theme_override_font_sizes/font_size = 18
+text = "
+[WASD] to move, [space] to dash and 
+[Left Mouse Button] to shoot
+
 
 
 
@@ -579,6 +580,7 @@ autowrap_mode = 2
 unique_name_in_owner = true
 process_mode = 3
 layer = 20
+visible = false
 script = ExtResource("25_q1d4o")
 
 [node name="Control" type="Control" parent="PauseLayer" unique_id=40976332]
@@ -631,10 +633,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -98.5
-offset_top = -50.5
-offset_right = 98.5
-offset_bottom = 50.5
+offset_left = -24.0
+offset_top = -34.0
+offset_right = 24.0
+offset_bottom = 34.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_wh075")
@@ -684,8 +686,7 @@ layer = 30
 unique_name_in_owner = true
 process_mode = 3
 z_index = 10
-position = Vector2(-75, 223)
-scale = Vector2(3, 3)
+position = Vector2(-9, 0)
 texture = ExtResource("21_ih5sr")
 script = ExtResource("22_4bewh")
 

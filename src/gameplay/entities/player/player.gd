@@ -16,7 +16,7 @@ const POST_DASH_IFRAMES := 0.12
 @export var bullet_speed: float = 1300.0
 
 @export_group("Movement")
-@export var speed: float = 600.0
+@export var speed: float = 500.0
 @export var acceleration: float = 4000
 @export var friction: float = 5000
 
@@ -314,8 +314,9 @@ func pulse():
 	can_pulse = false
 
 	var tween = create_tween()
+	var pulse_scale := _original_sprite_scale * 1.3 # 20% más grande
 
-	tween.tween_property(animated_sprite, "scale", Vector2(2.4, 2.4), 0.05)
+	tween.tween_property(animated_sprite, "scale", pulse_scale, 0.05)
 	tween.tween_property(animated_sprite, "scale", _original_sprite_scale, 0.1)
 
 	tween.finished.connect(func():

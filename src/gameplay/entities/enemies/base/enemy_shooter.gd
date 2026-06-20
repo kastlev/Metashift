@@ -6,7 +6,7 @@ extends Enemy
 @export_group("Shoot")
 ## Balas en la explosión
 @export var num_bullets: int = 8
-@export var bullet_speed: float = 300.0
+@export var bullet_speed: float = 100.0
 @export var bullet_range: float = 1000.0
 @export var bullet_scene: PackedScene
 

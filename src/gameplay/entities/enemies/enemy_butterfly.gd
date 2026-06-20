@@ -4,8 +4,8 @@ extends EnemyShooter
 
 @export_group("Characteristics")
 @export var must_explotion: bool = true
-@export var chase_range: float = 180.0   # si está más cerca que esto -> CHASE
-@export var wander_range: float = 240.0  # si está más lejos que esto -> WANDER
+@export var chase_range: float = 60.0   # si está más cerca que esto -> CHASE
+@export var wander_range: float = 80.0  # si está más lejos que esto -> WANDER
 
 @export_group("Shoot")
 @export var fire_rate_min: float = 1.0

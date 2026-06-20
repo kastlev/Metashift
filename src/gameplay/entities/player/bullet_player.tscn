@@ -11,7 +11,6 @@ script = ExtResource("1_ps4oa")
 target_group = "enemy"
 
 [node name="BulletSprite" type="Sprite2D" parent="." unique_id=1164700279]
-scale = Vector2(4.1, 4.1)
 texture = ExtResource("2_a4ve6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2098744088]

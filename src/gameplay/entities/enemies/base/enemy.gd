@@ -4,17 +4,13 @@ extends CharacterBody2D
 
 @export_group("Movement")
 ## Velocidad base de movimiento
-@export var speed: float = 150.0
+@export var speed: float = 20.0
 ## Daño al tocar al jugador
 @export var touch_damage: int = 1
 
 @export_group("Knockback")
 ## Qué tan rápido se frena el knockback recibido
-@export var knockback_friction: float = 900.0
-
-@export_group("Scale")
-## Escala global de la entidad — ajusta sprite y colisión juntos
-@export var entity_scale: float = 1.0
+@export var knockback_friction: float = 200.0
 
 @onready var animated_sprite: AnimatedSprite2D = %AnimatedSprite2D
 @onready var health: HealthComponent = %HealthComponent
@@ -33,7 +29,7 @@ var timer_destroy: Timer
 
 var flash_duration: float = 0.2
 var destroy_duration: float = 3
-
+var original_scale : Vector2
 var _knockback_velocity := Vector2.ZERO
 
 enum STATE {
@@ -46,7 +42,7 @@ enum STATE {
 @export var current_state: STATE = STATE.IDLE
 
 func _ready() -> void:
-	_apply_entity_scale()
+	original_scale = animated_sprite.scale
 	animated_sprite.animation_finished.connect(_on_animation_finished)
 	health.damaged.connect(_on_health_damaged)
 	health.died.connect(_on_health_died)
@@ -56,17 +52,13 @@ func _ready() -> void:
 	timer_flash.process_mode = Node.PROCESS_MODE_ALWAYS
 	_init_flash_shader_property()
 
-func _apply_entity_scale() -> void:
-	animated_sprite.scale *= entity_scale
-	collision_shape.scale *= entity_scale
-
 func _physics_process(delta: float) -> void:
 	if _knockback_velocity.length() > 1.0:
 		global_position += _knockback_velocity * delta
 		_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, knockback_friction * delta)
 	
 	if is_dead:
-		death_velocity.y += 1300 * delta
+		death_velocity.y += 430 * delta
 		global_position += death_velocity * delta
 		rotation += death_rotation_speed * delta
 		animated_sprite.modulate = Color(1, 1, 1, 1)
@@ -89,16 +81,6 @@ func _flip_sprite() -> void:
 		animated_sprite.flip_h = false
 	elif velocity.x < -5.0:
 		animated_sprite.flip_h = true
-
-#func _flip_sprite() -> void:
-	#if not is_instance_valid(player):
-		#return
-	#var dx := player.global_position.x - global_position.x
-	#if dx > 4.0:
-		#animated_sprite.flip_h = false
-	#elif dx < -4.0:
-		#animated_sprite.flip_h = true
-
 
 @abstract
 func update_behavior(_delta: float) -> void

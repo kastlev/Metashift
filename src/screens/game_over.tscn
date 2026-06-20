@@ -28,7 +28,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_c05n8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -59,7 +59,6 @@ script = ExtResource("1_gi1vw")
 unique_name_in_owner = true
 z_index = 1
 position = Vector2(-31, -29)
-scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_bjcof")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1216964587]
@@ -87,7 +86,7 @@ theme_override_constants/separation = 0
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_h1mia")
-theme_override_font_sizes/font_size = 90
+theme_override_font_sizes/font_size = 46
 text = "GAME OVER"
 
 [node name="RetryButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1482246244]
@@ -95,7 +94,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_hover_color = Color(1, 0.682119, 0.631921, 1)
 theme_override_fonts/font = ExtResource("3_h1mia")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_kxd6b")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nq38f")
 shortcut = SubResource("Shortcut_23y1t")

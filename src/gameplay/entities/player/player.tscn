@@ -12,8 +12,8 @@
 [ext_resource type="AudioStream" uid="uid://cpb276i5kk8es" path="res://assets/audio/sfx/dash/original_dash.ogg" id="11_agha6"]
 [ext_resource type="Texture2D" uid="uid://d1lqxbm4357rd" path="res://assets/art/characters/enemys/bullet_enemy.png" id="11_n7e5a"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_v2cuf"]
-size = Vector2(25, 24)
+[sub_resource type="CircleShape2D" id="CircleShape2D_wf1d4"]
+radius = 8.062258
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n7e5a"]
 shader = ExtResource("3_tk761")
@@ -44,7 +44,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rbdgq")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 6.0
 }]
@@ -57,7 +57,11 @@ iframe_duration = 1.0
 metadata/_custom_type_script = "uid://dpchwl51pc0ui"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tk761"]
-radius = 28.0
+radius = 9.055386
+
+[sub_resource type="Curve" id="Curve_wf1d4"]
+_data = [Vector2(0.055555552, 1), 0.0, 0.0, 0, 0, Vector2(0.8095238, 0.7865169), 0.0, 0.0, 0, 0, Vector2(1, 0.5393259), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Gradient" id="Gradient_n7e5a"]
 offsets = PackedFloat32Array(0.09322034, 0.6864407)
@@ -72,10 +76,15 @@ fill_from = Vector2(0.5, 0.5)
 motion_mode = 1
 script = ExtResource("1")
 bullet_scene = ExtResource("2_0mfjg")
+bullet_speed = 400.0
+speed = 300.0
+acceleration = 2000.0
+dash_speed = 700.0
+dash_duration = 0.08
 dash_cooldown = 0.4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=279697406]
-shape = SubResource("RectangleShape2D_v2cuf")
+shape = SubResource("CircleShape2D_wf1d4")
 
 [node name="BulletSpawn" type="Marker2D" parent="." unique_id=403588781]
 
@@ -85,7 +94,6 @@ shape = SubResource("RectangleShape2D_v2cuf")
 z_index = 11
 texture_filter = 1
 material = SubResource("ShaderMaterial_n7e5a")
-scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_36yls")
 autoplay = "default"
 frame = 1
@@ -112,24 +120,28 @@ shape = SubResource("CircleShape2D_tk761")
 z_index = 11
 emitting = false
 texture = ExtResource("11_n7e5a")
-lifetime = 0.42
+lifetime = 0.2
 one_shot = true
-explosiveness = 0.62
+speed_scale = 0.8
+explosiveness = 0.55
 randomness = 0.56
+lifetime_randomness = 0.26
 emission_shape = 1
-emission_sphere_radius = 43.35
+emission_sphere_radius = 10.41
 direction = Vector2(1, -6.715)
-spread = 96.19
+spread = 89.57
 initial_velocity_min = 227.94
 initial_velocity_max = 227.94
-scale_amount_max = 2.25
+scale_amount_min = 0.3
+scale_amount_max = 0.7
+scale_amount_curve = SubResource("Curve_wf1d4")
 color = Color(0.74082696, 0.52938944, 0.29755, 1)
 
 [node name="PointLight2D" type="PointLight2D" parent="VFX" unique_id=782073519]
 color = Color(0.18774086, 0.74873585, 0.631222, 1)
 energy = 0.1
 texture = SubResource("GradientTexture2D_kc3pt")
-texture_scale = 3.75
+texture_scale = 1.95
 
 [node name="Audio" type="Node2D" parent="." unique_id=776089549]
 

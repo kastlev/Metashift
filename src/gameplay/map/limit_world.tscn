@@ -1,27 +1,35 @@
 [gd_scene format=3 uid="uid://dyy5qut610exk"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y5ekd"]
+size = Vector2(480, 16)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n5ygq"]
-size = Vector2(1282.5, 13)
+size = Vector2(480, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_emose"]
-size = Vector2(686.25, 19.5)
+size = Vector2(288, 16.107224)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uxd6w"]
+size = Vector2(287.99997, 16.05413)
 
 [node name="limit" type="StaticBody2D" unique_id=2065008224 groups=["wall"]]
 
 [node name="WallTop" type="CollisionShape2D" parent="." unique_id=1088227505 groups=["wall"]]
-position = Vector2(563, -27)
-shape = SubResource("RectangleShape2D_n5ygq")
+position = Vector2(240, -16)
+shape = SubResource("RectangleShape2D_y5ekd")
+metadata/_edit_group_ = true
 
 [node name="WallDown" type="CollisionShape2D" parent="." unique_id=1702294277 groups=["wall"]]
-position = Vector2(563, 675)
+position = Vector2(240, 272)
 shape = SubResource("RectangleShape2D_n5ygq")
+metadata/_edit_group_ = true
 
 [node name="WallLeft" type="CollisionShape2D" parent="." unique_id=1664136957 groups=["wall"]]
-position = Vector2(-28, 333)
+position = Vector2(-16, 128)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_emose")
 
 [node name="WallRight" type="CollisionShape2D" parent="." unique_id=236316308 groups=["wall"]]
-position = Vector2(1182, 325)
+position = Vector2(496, 128)
 rotation = 1.5708
-shape = SubResource("RectangleShape2D_emose")
+shape = SubResource("RectangleShape2D_uxd6w")
