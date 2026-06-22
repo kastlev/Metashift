@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://d1lqxbm4357rd" path="res://assets/art/characters/enemys/bullet_enemy.png" id="11_n7e5a"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wf1d4"]
-radius = 8.062258
+radius = 6.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n7e5a"]
 shader = ExtResource("3_tk761")
@@ -73,15 +73,15 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [node name="Player" type="CharacterBody2D" unique_id=2076545720 groups=["player"]]
+collision_layer = 2
 motion_mode = 1
 script = ExtResource("1")
 bullet_scene = ExtResource("2_0mfjg")
-bullet_speed = 400.0
-speed = 300.0
-acceleration = 2000.0
-dash_speed = 700.0
-dash_duration = 0.08
-dash_cooldown = 0.4
+speed = 230.0
+acceleration = 2250.0
+friction = 1900.0
+dash_speed = 420.0
+dash_duration = 0.09
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=279697406]
 shape = SubResource("CircleShape2D_wf1d4")
@@ -92,7 +92,6 @@ shape = SubResource("CircleShape2D_wf1d4")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Body" unique_id=1484769626]
 z_index = 11
-texture_filter = 1
 material = SubResource("ShaderMaterial_n7e5a")
 sprite_frames = SubResource("SpriteFrames_36yls")
 autoplay = "default"
@@ -107,6 +106,8 @@ data = SubResource("Resource_tk761")
 metadata/_custom_type_script = "uid://1gysj4qvljlo"
 
 [node name="HurtboxComponent" type="Area2D" parent="Components" unique_id=1005815875 node_paths=PackedStringArray("health_component")]
+collision_layer = 8
+collision_mask = 192
 script = ExtResource("7_tk761")
 health_component = NodePath("../HealthComponent")
 metadata/_custom_type_script = "uid://dlgfycrugjthu"

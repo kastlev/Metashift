@@ -40,7 +40,7 @@ static func explotion(
 ## Mueve hacia un punto aleatorio cerca del jugador
 static func calc_wander_target_offset() -> Vector2:
 	var angle := randf_range(0.0, 2.0 * PI)
-	var dist := randf_range(0.0, 300.0)
+	var dist := randf_range(0.0, 90.0)
 	return Vector2(cos(angle), sin(angle)) * dist
 
 

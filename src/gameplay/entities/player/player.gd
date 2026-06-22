@@ -7,31 +7,45 @@ signal fired
 ## CONSTANTS
 const DASH_BUFFER_WINDOW := 0.18
 const DIR_LENIENCY_WINDOW := 0.08
-const POST_DASH_IFRAMES := 0.12
+const POST_DASH_IFRAMES := 0.0 #0.12
 
 ## EXPORTS
 @export_group("Shoot")
+## Escena de la bala que será instanciada al disparar.
 @export var bullet_scene: PackedScene
+
+## Tiempo de espera entre disparos. Menor valor = dispara más rápido.
 @export var fire_cooldown: float = 0.25
-@export var bullet_speed: float = 1300.0
+
+## Velocidad a la que viajan las balas. Afecta el alcance efectivo y sensación del disparo.
+@export var bullet_speed: float = 400.0
 
 @export_group("Movement")
-@export var speed: float = 500.0
-@export var acceleration: float = 4000
-@export var friction: float = 5000
+## Velocidad máxima de movimiento del jugador.
+@export var speed: float = 300.0
+
+## Qué tan rápido alcanza la velocidad máxima. Mayor valor = acelera más rápido.
+@export var acceleration: float = 1950
+
+## Qué tan rápido pierde velocidad al dejar de moverse. Mayor valor = movimiento más rígido.
+@export var friction: float = 1800
 
 @export_group("Dash")
-@export var dash_speed := 1200.0
-@export var dash_acceleration: float = 100.0
-@export var dash_friction: float = 1050.0
-@export var dash_duration: float = 0.1
+
+## Velocidad máxima durante el dash. Determina la distancia recorrida.
+@export var dash_speed : float = 600.0
+
+## Duración del dash en segundos.
+@export var dash_duration: float = 0.04
+
+## Tiempo de espera para poder volver a usar el dash.
 @export var dash_cooldown: float = 0.5
 
 @export_group("Knockback on Hurt")
 ## Radio en el que se empujan los enemigos cuando el player recibe daño
-@export var hurt_push_radius: float = 300.0
+@export var hurt_push_radius: float = 100.0
 ## Fuerza del empujón
-@export var hurt_push_force: float = 800.0
+@export var hurt_push_force: float = 200.0
 
 ## ONREADY
 @onready var animated_sprite: AnimatedSprite2D = $Body/AnimatedSprite2D
@@ -77,6 +91,8 @@ var _original_material: Material
 
 var _freeze_timer := 0.0
 const DASH_FREEZE_DURATION := 0.015
+var _dash_just_ended := false
+var _debug_dash_frame_count := 0
 
 var _land_tween: Tween
 
@@ -88,17 +104,10 @@ func _ready() -> void:
 	_original_material = animated_sprite.material
 
 func _physics_process(delta: float) -> void:
-		# Freeze solo del player — todo lo demás sigue corriendo
-	if _freeze_timer > 0.0:
-		_freeze_timer -= delta
-		# Durante el freeze mostrar la pose estirada pero no mover
-		_update_property_while_dash()
-		return
-	
 	_read_input()
-	_tick_timers(delta)
-	
 	_check_buffer_dash()
+	_tick_timers(delta)
+
 	_handle_dash()
 	_handle_movement(delta)
 	_handle_fire()
@@ -127,16 +136,13 @@ func _read_input() -> void:
 
 func _tick_timers(delta: float) -> void:
 	_fire_cooldown_timer = _tick_timer(_fire_cooldown_timer, delta)
-	#_dash_cooldown_timer = _tick_timer(_dash_cooldown_timer, delta)
 	_dash_timer = _tick_timer(_dash_timer, delta)
 	_dash_buffer_timer = _tick_timer(_dash_buffer_timer, delta)
 	_last_dir_timer = _tick_timer(_last_dir_timer, delta)
 	_dash_iframes_timer = _tick_timer(_dash_iframes_timer, delta)
-	
-# Guardar ANTES de tickear
+
 	var was_on_cooldown := _dash_cooldown_timer > 0.0
 	_dash_cooldown_timer = _tick_timer(_dash_cooldown_timer, delta)
-	# Ahora sí: antes estaba en cooldown y ahora llegó a 0
 	if was_on_cooldown and _dash_cooldown_timer <= 0.0:
 		var tween := create_tween()
 		tween.tween_property(animated_sprite, "modulate", Color(1.397, 1.397, 1.397, 1.0), 0.05)
@@ -154,37 +160,33 @@ func _check_buffer_dash() -> void:
 		_start_dash()
 		_dash_buffer_timer = 0.0
 
-
-
 func _do_dash_freeze() -> void:
 	_freeze_timer = DASH_FREEZE_DURATION
-
 
 func _start_dash() -> void:
 	if is_dashing:
 		return
-
 	if !_can_dash():
 		return
-
 	var dir := input_direction
 	if dir == Vector2.ZERO and _last_dir_timer > 0.0:
 		dir = _last_valid_dir
 	if dir == Vector2.ZERO:
 		return
-
 	_dash_direction_started = dir
 	is_dashing = true
+	_debug_dash_frame_count = 0
 	_dash_timer = dash_duration
 	_dash_cooldown_timer = dash_cooldown
 	_do_dash_freeze()
 	Utils.play_sfx_random(sfx_dash)
 	_dash_position_started = global_position
-	await get_tree().create_timer(0.2).timeout
-	get_tree().call_group("shockwave", "play", _dash_position_started)
+	print("DASH dir=", dir, " magnitude=", dir.length(), " input_direction_raw=", input_direction)
+
 
 func _handle_dash() -> void:
 	if !is_dashing:
+		_dash_just_ended = false
 		return
 
 	animated_sprite.material = null
@@ -192,26 +194,39 @@ func _handle_dash() -> void:
 	if input_direction != Vector2.ZERO:
 		var _current_input_influence_to_dash = 0.5
 		var new_dir = _dash_direction_started.slerp(input_direction, _current_input_influence_to_dash)
-		
-		# Solo aplicar si el nuevo dir no se aleja demasiado del original
 		if new_dir.dot(_dash_direction_started) > 0.0:
 			_dash_direction_started = new_dir
 
+	var target_velocity := _dash_direction_started * dash_speed
+	var dash_progress := 1.0 - (_dash_timer / dash_duration)
+	if dash_progress > 0.75:
+		target_velocity = Vector2.ZERO
+
 	velocity = _dash_direction_started * dash_speed
+
+	_debug_dash_frame_count += 1
+	print("  dash_frame=", _debug_dash_frame_count, " progress=", dash_progress, " vel_len=", velocity.length(), " dash_dir=", _dash_direction_started)
+
 	_update_property_while_dash()
 
 	if _dash_timer <= 0.0:
 		is_dashing = false
+		_dash_just_ended = true
 		_dash_iframes_timer = POST_DASH_IFRAMES
 		_update_property_end_dash()
 
-func _update_property_while_dash():
+func _end_dash_push():
+	Utils.push_enemies_from_point(
+		get_tree(),
+		global_position,
+		50.0,
+		300.0
+	)
 	
+func _update_property_while_dash():
 	if _land_tween:
 		_land_tween.kill()
 		_land_tween = null
-	
-	collision_shape_2d.disabled = true
 
 	_afterimage_counter += 1
 	if _afterimage_counter % 2 == 0:
@@ -226,40 +241,36 @@ func _update_property_while_dash():
 	var horizontal_stretch = Vector2(1.4, 0.7)
 	var vertical_stretch = Vector2(0.4, 1.8)
 	var dash_scale = horizontal_stretch if abs(dir.x) > abs(dir.y) else vertical_stretch
-	
+
 	var scale_plus = Vector2.ZERO
-	
+
 	if random <= 0.5:
-		#scale_plus = Vector2(2.0, 2.0)
 		animated_sprite.z_index = _original_sprite_z_index
 	else:
-		#scale_plus = Vector2(0, 0)
 		animated_sprite.z_index = 9
-	
+
 	var base_scale = _original_sprite_scale * dash_scale
 	var final_scale = base_scale + scale_plus
-	
+
 	animated_sprite.scale = final_scale
-	
+
 	var is_diagonal = abs(dir.x) > 0.3 and abs(dir.y) > 0.3
-	
+
 	if is_diagonal:
 		if dir.y < 0:
 			animated_sprite.skew = dir.x * 0.7
 		else:
 			animated_sprite.skew = dir.x * -0.7
-	var white_color = Color(1.439, 1.439, 1.439, 1.0)
-	var dark_color = Color(0.859, 0.859, 0.859)
-	
-	animated_sprite.modulate = dark_color
-	
+
+	animated_sprite.modulate = Color(0.859, 0.859, 0.859)
+
 func _update_property_end_dash():
-	collision_shape_2d.disabled = false
+	print("DASH END dist=", global_position.distance_to(_dash_position_started), " vel_al_iniciar=", velocity)
 	_afterimage_counter = 0
 	animated_sprite.scale = _original_sprite_scale
 	animated_sprite.skew = 0.0
 	random = 0.0
-	
+
 	if _land_tween:
 		_land_tween.kill()
 
@@ -272,53 +283,35 @@ func _update_property_end_dash():
 		.set_trans(Tween.TRANS_ELASTIC)\
 		.set_ease(Tween.EASE_OUT)
 
-
 func _handle_movement(delta):
-	if is_dashing:
+	if is_dashing or _dash_just_ended:
+		_dash_just_ended = false
 		return
 	animated_sprite.material = _original_material
 	if input_direction:
 		velocity = velocity.move_toward(input_direction * speed, acceleration * delta)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-		
-		#if _land_tween:
-			#_land_tween.kill()
-#
-		#var dir := _last_valid_dir.normalized()
-		#var land_squash := Vector2(0.5, 1.8) if abs(dir.x) > abs(dir.y) else Vector2(1.8, 0.5)
-		#animated_sprite.scale = _original_sprite_scale * land_squash
-#
-		#_land_tween = create_tween()
-		#_land_tween.tween_property(animated_sprite, "scale", _original_sprite_scale, 0.62)\
-			#.set_trans(Tween.TRANS_ELASTIC)\
-			#.set_ease(Tween.EASE_OUT)
 
 func _handle_fire():
 	if !is_shooting:
 		return
-		
 	if _fire_cooldown_timer > 0.0:
 		return
-		
 	pulse()
 	_fire()
 	GameCameraService.add_trauma(0.3)
 	_fire_cooldown_timer = fire_cooldown
 	fired.emit()
-	
+
 func pulse():
 	if not can_pulse:
 		return
-
 	can_pulse = false
-
 	var tween = create_tween()
-	var pulse_scale := _original_sprite_scale * 1.3 # 20% más grande
-
+	var pulse_scale := _original_sprite_scale * 1.3
 	tween.tween_property(animated_sprite, "scale", pulse_scale, 0.05)
 	tween.tween_property(animated_sprite, "scale", _original_sprite_scale, 0.1)
-
 	tween.finished.connect(func():
 		can_pulse = true
 	)
@@ -355,10 +348,8 @@ func _update_blink() -> void:
 
 	if health.iframe_timer > 0.0:
 		animated_sprite.visible = int(health.iframe_timer * 10.0) % 2 == 0
-		collision_shape_2d.disabled = true
 	else:
 		animated_sprite.visible = true
-		collision_shape_2d.disabled = false
 
 func _spawn_afterimage() -> void:
 	var ghost := AnimatedSprite2D.new()
@@ -382,10 +373,8 @@ func _spawn_afterimage() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		is_shooting = event.pressed
-	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		_dash()
-	
 	if event.is_action_pressed("dash"):
 		_dash()
 
@@ -394,6 +383,7 @@ func _dash():
 		_start_dash()
 	else:
 		_dash_buffer_timer = DASH_BUFFER_WINDOW
+
 ### SIGNALS
 func _on_damaged(_dir: Vector2 = Vector2.ZERO) -> void:
 	Utils.play_sfx_random(sfx_hurt)
@@ -401,23 +391,21 @@ func _on_damaged(_dir: Vector2 = Vector2.ZERO) -> void:
 	Utils.push_enemies_from_point(get_tree(), global_position, hurt_push_radius, hurt_push_force)
 	if _hitstop_active:
 		return
-
 	_hitstop_active = true
 	await _do_hitstop()
 	_hitstop_active = false
 	GameCameraService.add_trauma(0.65)
 	particles_hurt.emitting = true
-	
-#
+
 func _on_died() -> void:
 	Engine.time_scale = 1.0
 	GLOBAL.last_position_player = position
 	GLOBAL.frame_sprite_player_index = animated_sprite.frame
 	queue_free()
 
-## Uitlity
+## Utility
 func _can_dash() -> bool:
 	return _dash_cooldown_timer <= 0.0
-	
+
 func _tick_timer(timer: float, delta: float) -> float:
 	return maxf(timer - delta, 0.0)

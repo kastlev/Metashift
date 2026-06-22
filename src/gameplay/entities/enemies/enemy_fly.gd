@@ -49,9 +49,9 @@ func _rebound_around(delta: float) -> void:
 	velocity = velocity.bounce(collision.get_normal())
 
 	if collider.is_in_group("wall"):
-		if scale <= original_scale * 2.2:
+		if scale < original_scale * 1.7:
 			scale += original_scale * 0.1
-		if scale >= Vector2(1.3, 1.3):
+		if scale >= Vector2(original_scale * 1.7):
 			GameCameraService.add_trauma(0.4)
 		current_state = STATE.CHARGING
 		

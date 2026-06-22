@@ -7,9 +7,12 @@
 radius = 8.0
 
 [node name="BulletEnemy" type="Area2D" unique_id=647204820]
+collision_layer = 64
+collision_mask = 9
 script = ExtResource("1_frctk")
 
 [node name="BulletSprite" type="Sprite2D" parent="." unique_id=223122217]
+scale = Vector2(2, 2)
 texture = ExtResource("2_d10bv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1678576749]

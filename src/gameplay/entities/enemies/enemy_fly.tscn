@@ -89,17 +89,18 @@ metadata/_custom_type_script = "uid://dpchwl51pc0ui"
 radius = 9.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_efgd4"]
-radius = 25.0
+radius = 27.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3nloh"]
-radius = 7.071068
+radius = 7.0
 
 [node name="EnemyFly" type="CharacterBody2D" unique_id=845573052 groups=["enemy"]]
+collision_layer = 4
+collision_mask = 5
 motion_mode = 1
-safe_margin = 20.0
 script = ExtResource("1_eb487")
 bullet_scene = ExtResource("2_3nloh")
-speed = 500.0
+speed = 190.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=424312543]
 unique_name_in_owner = true
@@ -120,6 +121,9 @@ metadata/_custom_type_script = "uid://1gysj4qvljlo"
 
 [node name="HurtboxComponent" type="Area2D" parent="." unique_id=522267467 node_paths=PackedStringArray("health_component") groups=["enemy"]]
 unique_name_in_owner = true
+visible = false
+collision_layer = 16
+collision_mask = 33
 script = ExtResource("8_fsub5")
 health_component = NodePath("../HealthComponent")
 
@@ -128,14 +132,19 @@ shape = SubResource("CircleShape2D_mioob")
 
 [node name="DetectionComponent" type="Area2D" parent="." unique_id=2141554077]
 unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
 script = ExtResource("9_uvl3y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionComponent" unique_id=288859384]
 shape = SubResource("CircleShape2D_efgd4")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=1362638503]
+collision_layer = 128
+collision_mask = 8
 script = ExtResource("9_eb487")
 metadata/_custom_type_script = "uid://donfc4y1yc4fy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=830907339]
+position = Vector2(-0.54, -0.505)
 shape = SubResource("CircleShape2D_3nloh")

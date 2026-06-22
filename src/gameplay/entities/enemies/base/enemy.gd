@@ -4,7 +4,7 @@ extends CharacterBody2D
 
 @export_group("Movement")
 ## Velocidad base de movimiento
-@export var speed: float = 20.0
+@export var speed: float = 30.0
 ## Daño al tocar al jugador
 @export var touch_damage: int = 1
 

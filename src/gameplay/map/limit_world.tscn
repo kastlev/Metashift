@@ -20,7 +20,7 @@ shape = SubResource("RectangleShape2D_y5ekd")
 metadata/_edit_group_ = true
 
 [node name="WallDown" type="CollisionShape2D" parent="." unique_id=1702294277 groups=["wall"]]
-position = Vector2(240, 272)
+position = Vector2(240, 285)
 shape = SubResource("RectangleShape2D_n5ygq")
 metadata/_edit_group_ = true
 
