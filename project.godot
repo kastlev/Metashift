@@ -22,6 +22,7 @@ config/icon="res://assets/art/ui/hud/lifes.png"
 GLOBAL="*res://src/core/autoload/global.gd"
 SceneLoader="*uid://bwlniyy5k4qh4"
 GameCameraService="*uid://bnbcbopagnabk"
+ReplayRecorder="*uid://bpfoa18rk1bqv"
 
 [display]
 
@@ -30,6 +31,18 @@ window/size/viewport_height=270
 window/size/mode=4
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image_hotspot=Vector2(-10, -10)
+
+[editor]
+
+movie_writer/video_quality=1.0
+movie_writer/ogv/encoding_speed=1
+movie_writer/movie_file="C:/Users/LUIS/Desktop/gameplay imagees/gameplay2.png"
+movie_writer/disable_vsync=true
+movie_writer/fps=30
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/replay_recorder/plugin.cfg")
 
 [file_customization]
 

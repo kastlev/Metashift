@@ -6,8 +6,8 @@ signal fired
 
 ## CONSTANTS
 const DASH_BUFFER_WINDOW := 0.18
-const DIR_LENIENCY_WINDOW := 0.08
-const POST_DASH_IFRAMES := 0.0 #0.12
+const DIR_LENIENCY_WINDOW := 0.18
+const POST_DASH_IFRAMES := 0.3 #0.12
 
 ## EXPORTS
 @export_group("Shoot")

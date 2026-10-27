@@ -51,7 +51,6 @@ animations = [{
 
 [sub_resource type="Resource" id="Resource_tk761"]
 script = ExtResource("5_4f0qm")
-max_health = 6.0
 has_iframes = true
 iframe_duration = 1.0
 metadata/_custom_type_script = "uid://dpchwl51pc0ui"

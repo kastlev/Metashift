@@ -6,8 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://ctnhkvtdyjfn8" path="res://src/gameplay/entities/enemies/enemy_fly.tscn" id="4_wh075"]
 [ext_resource type="Script" uid="uid://bdefyhhaat5bj" path="res://src/systems/camera/shake_camera.gd" id="5_q1d4o"]
 [ext_resource type="PackedScene" uid="uid://ces1b4b2cxm5b" path="res://src/gameplay/entities/player/player.tscn" id="6_ehu7x"]
-[ext_resource type="Texture2D" uid="uid://dngq4jxe6dflr" path="res://assets/art/world/backgrouds/background.png" id="7_efw5t"]
 [ext_resource type="PackedScene" uid="uid://dyy5qut610exk" path="res://src/gameplay/map/limit_world.tscn" id="8_7l8xo"]
+[ext_resource type="Texture2D" uid="uid://dnxe8wk1cpoa8" path="res://assets/art/world/backgrouds/background2.png" id="8_efw5t"]
 [ext_resource type="Script" uid="uid://docx3g31omwp3" path="res://src/shaders/shader_overlay_manager.gd" id="9_0vkfw"]
 [ext_resource type="Shader" uid="uid://duvbuhkxqp5oc" path="res://src/shaders/effects/overlay/atmospheric_flow.gdshader" id="10_v55iv"]
 [ext_resource type="Shader" uid="uid://clpqj0fqasbah" path="res://src/shaders/effects/overlay/floating_particles.gdshader" id="11_4t2tg"]
@@ -383,7 +383,8 @@ wait_time = 9.0
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_wh075")
 position = Vector2(240, 135)
-texture = ExtResource("7_efw5t")
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("8_efw5t")
 metadata/_edit_lock_ = true
 
 [node name="PostProcess" type="Node2D" parent="World/LevelRoot/Environment" unique_id=491665007]
@@ -517,9 +518,21 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("18_peh15")
 
-[node name="Rounds" type="Sprite2D" parent="HudLayer/PlayerUI" unique_id=450150047]
+[node name="MarginContainer2" type="MarginContainer" parent="HudLayer/PlayerUI" unique_id=1102214103]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-43.115, -13.375)
+
+[node name="Rounds" type="Sprite2D" parent="HudLayer/PlayerUI/MarginContainer2" unique_id=450150047]
 unique_name_in_owner = true
-position = Vector2(240, 16)
+scale = Vector2(1.4, 1.4)
 texture = ExtResource("23_sh2w7")
 hframes = 5
 
