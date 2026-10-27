@@ -13,7 +13,7 @@ config_version=5
 config/name="Metashift"
 config/tags=PackedStringArray("2d", "best_practices", "shaders")
 run/main_scene="uid://dvp4tc7qpcj3g"
-config/features=PackedStringArray("4.6", "Mobile")
+config/features=PackedStringArray("4.7", "Mobile")
 run/max_fps=90
 config/icon="res://assets/art/ui/hud/lifes.png"
 
@@ -22,14 +22,27 @@ config/icon="res://assets/art/ui/hud/lifes.png"
 GLOBAL="*res://src/core/autoload/global.gd"
 SceneLoader="*uid://bwlniyy5k4qh4"
 GameCameraService="*uid://bnbcbopagnabk"
+ReplayRecorder="*uid://bpfoa18rk1bqv"
 
 [display]
 
+window/size/viewport_width=480
+window/size/viewport_height=270
 window/size/mode=4
-window/size/window_width_override=1280
-window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image_hotspot=Vector2(-10, -10)
+
+[editor]
+
+movie_writer/video_quality=1.0
+movie_writer/ogv/encoding_speed=1
+movie_writer/movie_file="C:/Users/LUIS/Desktop/gameplay imagees/gameplay2.png"
+movie_writer/disable_vsync=true
+movie_writer/fps=30
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/replay_recorder/plugin.cfg")
 
 [file_customization]
 
@@ -104,6 +117,17 @@ dash={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":32,"location":0,"echo":false,"script":null)
 ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="world"
+2d_physics/layer_2="player      "
+2d_physics/layer_3="enemy       "
+2d_physics/layer_4="player_hurtbox  "
+2d_physics/layer_5="enemy_hurtbox "
+2d_physics/layer_6="player_bullet  "
+2d_physics/layer_7="enemy_bullet   "
+2d_physics/layer_8="enemy_hitbox     "
 
 [physics]
 

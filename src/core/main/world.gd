@@ -32,7 +32,6 @@ var direction_lerp_speed := 2
 
 
 func _ready() -> void:
-	print("READY START")
 	transition_rect.visible = true
 	#shader_manager.activate_only("Transition")
 	var t := Time.get_ticks_usec()

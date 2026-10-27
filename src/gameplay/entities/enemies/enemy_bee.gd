@@ -1,18 +1,10 @@
-# EnemyBeeNew.gd
-class_name EnemyBeeNew
-extends Enemy
+class_name EnemyBee
+extends EnemyShooter
 
 
 @export_group("Movement")
 ## Intervalo en segundos para actualizar la dirección hacia el jugador
-@export var direction_update_interval: float = 1.5  # original: 1.5
-
-@export_group("Shoot")
-@export var num_bullets: int = 6
-@export var bullet_speed: float = 250.0
-@export var bullet_range: float = 1000.0
-@export var bullet_scene: PackedScene
-
+@export var direction_update_interval: float = 1.5
 @onready var detection: DetectionComponent = %DetectionComponent
 
 var _direction_timer: float = 0.0
